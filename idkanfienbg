@@ -712,10 +712,10 @@ function LoadScript()
     CreateToggle("Misc", "Auto Execute", "AutoExecute", function()
         task.wait(function()
             local autoExecute = _G.Settings.AutoExecute
-
+    
             local queue_on_teleport = queue_on_teleport or syn.queue_on_teleport or fluxus.queue_on_teleport or
                 function(...) return ... end
-
+    
             game.Players.LocalPlayer.OnTeleport:Connect(function(state)
                 if state ~= Enum.TeleportState.Started and state ~= Enum.TeleportState.InProgress then return end
                 if autoExecute then
@@ -726,11 +726,12 @@ function LoadScript()
                     wait(2)
                     if _G.NowLoaded then return end
                     LoadScript()
-                ]])
+                    ]])
                 end
             end)
         end)
     end)
+    
 
     CreateSection("Misc", "Information")
 
