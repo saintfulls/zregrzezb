@@ -255,9 +255,9 @@ function LoadScript()
         local Curr
 
         if Multi then
-            Curr = { _G.Settings[SettingsValue] }
+            Curr =  {}}
         else
-            Curr = _G.Settings[SettingsValue]
+            Curr = ""
         end
 
         local Tab = Tabs[Tab]
@@ -384,7 +384,7 @@ function LoadScript()
         "SelectedLevel", false)
     CreateToggle("Main", "Friends Only", "FriendsOnly", function()
         local Fired = false
-        while _G.Settings.FriendsOnly do
+        while task.wait() do
             if game:GetService("Players").LocalPlayer.PlayerGui.HUD.WorldSelector.Visible and game.PlaceId == 6068961298 and not Fired then
                 local args = {
                     [1] = "ManageShuttle",
@@ -399,13 +399,13 @@ function LoadScript()
             if not game:GetService("Players").LocalPlayer.PlayerGui.HUD.WorldSelector.Visible then
                 Fired = false
             end
-            wait()
         end
     end)
 
 
     CreateToggle("Main", "Auto Join Map", "AutoJoin", function()
-        task.wait(function()
+        while task.wait() do
+            
             local humanoid = game.Players.LocalPlayer.Character.HumanoidRootPart
             if not game:GetService("Players").LocalPlayer.PlayerGui.HUD.WorldSelector.Visible and not game:GetService("Players").LocalPlayer.PlayerGui.HUD.WorldSelector2.Visible and game.PlaceId == 6068961298 then
                 humanoid.CFrame = workspace.Mechanisms.Shuttles["4"].Screen.CFrame
@@ -424,15 +424,15 @@ function LoadScript()
 
                 game:GetService("Players").LocalPlayer:WaitForChild("Input"):FireServer(unpack(args))
             end
-            wait()
-        end)
+
+        end
     end)
     local StartDelaySlide = CreateSlider("Main", "Auto Start Delay",
         { Min = 0, Max = 10, Increment = 1, Default = _G.Settings.StartDelay },
         "seconds", "StartDelay", false)
 
     CreateToggle("Main", "Auto Start", "AutoStart", function()
-        while _G.Settings.AutoStart do
+        while task.wait() do
             if game:GetService("Players").LocalPlayer.PlayerGui.HUD.WorldSelector2.Start.Visible and game.PlaceId == 6068961298 then
                 wait(_G.Settings.StartDelay)
                 local args = {
@@ -446,7 +446,7 @@ function LoadScript()
 
                 game:GetService("Players").LocalPlayer:WaitForChild("Input"):FireServer(unpack(args))
             end
-            wait()
+
         end
     end)
     CreateSection("Main", "Game")
@@ -454,7 +454,7 @@ function LoadScript()
 
     CreateToggle("Main", "Auto Play", "AutoPlay", function()
         local Fired = false
-        task.wait(function()
+       while task.wait() do
             if game:GetService("Players").LocalPlayer.PlayerGui.HUD.Settings.Window.ScrollingFrame.DefaultAuto.Frame.BackgroundColor3 == Color3.fromRGB(45, 45, 45) and not Fired then
                 GuiService.SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.HUD.Settings.Window
                     .ScrollingFrame
@@ -466,12 +466,13 @@ function LoadScript()
                 Fired = true
             end
             wait()
-        end)
+        end
     end)
 
     CreateToggle("Main", "Auto Fast Speed", "FastSpeed", function()
         local Fired = false
-        task.wait(function()
+       while task.wait() do
+        
             if game:GetService("Players").LocalPlayer.PlayerGui.HUD.Settings.Window.ScrollingFrame.DefaultFastest.Frame.BackgroundColor3 == Color3.fromRGB(45, 45, 45) and not Fired then
                 GuiService.SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.HUD.Settings.Window
                     .ScrollingFrame
@@ -482,14 +483,14 @@ function LoadScript()
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
                 Fired = true
             end
-            wait()
-        end)
+
+        end
     end)
 
     CreateToggle("Main", "Auto Retry", "AutoRetry", function()
         local Fired = false
 
-        task.wait(function()
+        while task.wait() do
             if not Fired and game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("VictoryScreenNew").DecisionFrame.Buttons.Replay.Visible then
                 wait(0.5)
                 GuiService.SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild(
@@ -501,13 +502,14 @@ function LoadScript()
                 VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Return, false, game)
                 Fired = true
             end
-            wait()
-        end)
+
+        end
     end)
 
     CreateToggle("Main", "Auto Leave", "AutoLeave", function()
         local Fired = false
-        task.wait(function()
+       while task.wait() do
+        
             if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("VictoryScreenNew").DecisionFrame.Buttons.Return.Visible and game.PlaceId ~= 6068961298 and not Fired then
                 if _G.Settings.AutoNext and not game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("VictoryScreenNew").DecisionFrame.Buttons.Next.Visible then
                     GuiService.SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild(
@@ -531,13 +533,13 @@ function LoadScript()
                     Fired = true
                 end
             end
-            wait()
-        end)
+        end
     end)
 
     CreateToggle("Main", "Auto Next", "AutoNext", function()
-        task.wait(function()
-            local Fired = false
+        local Fired = false
+        while task.wait() do
+            
             if game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("VictoryScreenNew").DecisionFrame.Buttons.Next.Visible and game.PlaceId ~= 6068961298 and not Fired then
                 wait(0.5)
                 GuiService.SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild(
@@ -553,8 +555,7 @@ function LoadScript()
             if not game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("VictoryScreenNew").Visible then
                 Fired = false
             end
-            wait()
-        end)
+        end
     end)
 
 
