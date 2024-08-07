@@ -463,6 +463,7 @@ function LoadScript(isPremium)
                 local money = GetMoney()
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
+                        print(Macros[1])
                         if self.Name == "Sell" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
                                 [1] = timeElapsed(),
