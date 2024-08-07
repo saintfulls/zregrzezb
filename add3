@@ -435,17 +435,17 @@ function LoadScript(isPremium)
         for profile_name, macro_table in pairs(Macros) do
             local save_data = {}
             save_data[profile_name] = macro_table
-            writefile(macroFolder .. "\\" .. profile_name .. ".json",
+            writefile(macroFolder .. "/" .. profile_name .. ".json",
                 game:GetService("HttpService"):JSONEncode(save_data))
         end
     end
 
     function Save()
-        writefile(MainFolder .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
+        writefile(MainFolder.."/" .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
         SaveMacros()
     end
 
-    Save()
+    
 
     function GetMoney()
         local money = player:WaitForChild("Money", math.huge) -- waits indefinitely until "Money" is created
@@ -809,6 +809,7 @@ function LoadScript(isPremium)
     end)
 
     Rayfield:LoadConfiguration()
+    Save()
     task.wait(2)
     _G.NowLoaded = true
     CreateNotification("Loaded!", "Wing Hub has loaded in " .. tick() - StartLoad .. " seconds.", 5)
