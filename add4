@@ -221,7 +221,16 @@ do
     CreateSection("Main", "Mob Farm")
 
     local Enemies = {}
-    local MobDD = CreateDropdown("Main", "Enemies", "SelectedEnemies", RefreshEnemiesTable(), true, false)
+    local MobDD = Tabs.Main:AddDropdown("SelectedEnemies", {
+        Title = "Enemies",
+        Values = RefreshEnemiesTable(),
+        Multi = true,
+        Default = "None"
+    })
+    MobDD:OnChanged(function(Value)
+        print(Value)
+       
+    end)
 
     local FarmSelected = CreateToggle("Main", "Farm Selected", "AutoFarm", function()
         while task.wait() do
