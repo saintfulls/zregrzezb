@@ -448,9 +448,7 @@ function LoadScript(isPremium)
     
 
     function GetMoney()
-        local money = player:WaitForChild("Money", math.huge) -- waits indefinitely until "Money" is created
-
-        return money.Value or nil
+        return player.Money.Value
     end
 
     local game_metatable = getrawmetatable(game)
