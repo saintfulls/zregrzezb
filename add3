@@ -507,7 +507,7 @@ function LoadScript(isPremium)
                     table.insert(Macros[_G.Settings.SelectedMacro], {
                         [1] = timeElapsed(),
                         [2] = {
-                            [1] = unit
+                            [1] = tostring(unit)
 
                         },
                         [3] = money
