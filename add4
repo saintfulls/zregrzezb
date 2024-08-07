@@ -61,8 +61,8 @@ end
 
 local MainFolder = "WingHub/" .. game.Players.LocalPlayer.Name
 
-if not isfolder(MainFolder .. "/" .. game.Players.LocalPlayer.Name .. "/AnimeStrike") then
-    makefolder(MainFolder .. "/" .. game.Players.LocalPlayer.Name .. "/AnimeStrike")
+if not isfolder(MainFolder  .. "/AnimeStrike") then
+    makefolder(MainFolder.. "/AnimeStrike")
 end
 
 local GameFolder = MainFolder .. "/AnimeStrike"
