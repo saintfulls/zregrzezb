@@ -150,6 +150,7 @@ function CreateDropdown(Tab, Name, SettingsValue, Values, Multi, DoFunction, Fun
         Default = "None"
     })
     Dropdown:OnChanged(function(Value)
+        print(Value)
         if DoFunction then
             task.spawn(Function)
         end
