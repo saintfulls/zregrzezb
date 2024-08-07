@@ -464,13 +464,9 @@ function LoadScript(isPremium)
 
                 local Args = {...}
 
-                local money = nil
+                local money = 0
                 
-                repeat
-                    task.wait()
-                until game.PlaceId ~= 15846919378
-
-                money = GetMoney()
+                
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
 
