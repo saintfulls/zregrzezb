@@ -378,6 +378,13 @@ function LoadScript(isPremium)
         end
     end
 
+    function SetParagraph(Paragraph, Title, Content)
+        Paragraph:Set({
+            Title = Title,
+            Content = table.concat(Content, "\n")
+        })
+    end
+
     -- [[// Main Tab \\]] --
     CreateSection("Main", "Mob Farm")
     local EnemieTemplate = {"Mob: None", "Health: None", "Status: None"}
@@ -466,10 +473,7 @@ function LoadScript(isPremium)
 
         local InformationText = {"Mob: None", "Health: None", "Status: None"}
 
-        EnemieParagraph:Set({
-            Title = "Current Mob",
-            Content = table.concat(InformationText, "\n")
-        })
+        SetParagraph(EnemieParagraph, "Current Mob", InformationText)
     end)
 
     CreateButton("Main", "Refresh Enemies", function()
@@ -491,10 +495,7 @@ function LoadScript(isPremium)
     end, false, function()
         local InformationText = {"Mob: None", "Health: None", "Status: None"}
 
-        EnemieParagraph:Set({
-            Title = "Current Mob",
-            Content = table.concat(InformationText, "\n")
-        })
+        SetParagraph(EnemieParagraph, "Current Mob", InformationText)
     end)
 
     CreateSection("Main", "Others")
