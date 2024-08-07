@@ -147,9 +147,8 @@ function CreateDropdown(Tab, Name, SettingsValue, Values, Multi, DoFunction, Fun
         Title = Name,
         Values = Values,
         Multi = Multi,
-        Default = Options[SettingsValue].Value
+        Default = Values[1]
     })
-
     Dropdown:OnChanged(function(Value)
         if DoFunction then
             task.spawn(Function)
