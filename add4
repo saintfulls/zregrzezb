@@ -407,7 +407,6 @@ function LoadScript(isPremium)
     function GetWorldEnemies()
         local World
         for i, v in pairs(workspace.Client.Maps:GetChildren()) do
-
             local currentworld = workspace.Server.WorldMobs[v.Name]
             if currentworld then
                 World = currentworld
