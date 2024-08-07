@@ -147,7 +147,7 @@ function CreateDropdown(Tab, Name, SettingsValue, Values, Multi, DoFunction, Fun
         Title = Name,
         Values = Values,
         Multi = Multi,
-        Default = ""
+        Default = "None"
     })
     Dropdown:OnChanged(function(Value)
         if DoFunction then
