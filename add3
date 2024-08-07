@@ -24,8 +24,8 @@ function LoadScript(isPremium)
         LoadingSubtitle = "by Wing Hub",
         ConfigurationSaving = {
             Enabled = true,
-            FolderName = "WingHub/" .. game.Players.LocalPlayer.Name, -- Create a custom folder for your hub/game
-            FileName = "FNTD"
+            FolderName = "WingHub/" .. game.Players.LocalPlayer.Name.."/FNTD", -- Create a custom folder for your hub/game
+            FileName = "Settings"
         },
         Discord = {
             Enabled = true,
@@ -87,7 +87,7 @@ function LoadScript(isPremium)
         makefolder("WingHub/".. player.Name )
     end
 
-    local MainFolder = "WingHub" 
+    local MainFolder = "WingHub/"..player.Name
 
     if not isfolder(MainFolder .. "/FNTD") then
         makefolder(MainFolder .. "/FNTD")
@@ -411,7 +411,7 @@ function LoadScript(isPremium)
     end
     
     function Save()
-        writefile(SettingsFile, game:GetService("HttpService"):JSONEncode(JSON))
+        writefile(MainFolder, game:GetService("HttpService"):JSONEncode(JSON))
         SaveMacros()
     end
 
