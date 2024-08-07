@@ -107,6 +107,21 @@ function LoadScript(isPremium)
 
     local configFolder = GameFolder .. "/Configs"
 
+    for _, file in pairs(listfiles(macroFolder)) do
+        if not pcall(function()
+            local json_content = game:GetService("HttpService"):JSONDecode(readfile(
+                                                                               file))
+    
+            for k, v in pairs(json_content) do
+                if Macros[k] ~= nil then
+                    delfile(file)
+                else
+                    Macros[k] = v
+                end
+            end
+        end) then print("Error reading file: " .. file) end
+    end
+
     function refreshMacrosList()
         local MacrosList = listfiles(macroFolder)
         local items = {}
@@ -401,6 +416,38 @@ function LoadScript(isPremium)
         end
     end
 
+    function StartMacroTimer()
+        repeat task.wait() until game.Players.LocalPlayer.PlayerGui:WaitForChild(
+            "HUD"):WaitForChild("ModeVoteFrame").Visible or
+            game:GetService("ReplicatedStorage"):WaitForChild("WaveValue").Value > 0
+    
+        if game:GetService("ReplicatedStorage"):FindFirstChild("WaveValue").Value >
+            0 then
+            startTime = os.time()
+            startTimeOffset = os.time()
+        else
+            local seconds_offset = tonumber(Split(
+                                                game.Players.LocalPlayer.PlayerGui:WaitForChild(
+                                                    "HUD")
+                                                    :WaitForChild("ModeVoteFrame")
+                                                    .Seconds.Text, " ")[1])
+    
+            if seconds_offset ~= nil then
+                startTime = os.time() + seconds_offset
+                startTimeOffset = os.time() + seconds_offset
+            end
+        end
+    
+        while true do
+            if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD")
+                :WaitForChild("ModeVoteFrame").Visible and GetGameSpeed() > 1 then
+                startTimeOffset = startTimeOffset + (1 * (GetGameSpeed() - 1))
+            end
+            -- print(timeElapsed())
+            task.wait(1)
+        end
+    end
+
     function SaveMacros()
         for profile_name, macro_table in pairs(Macros) do
             local save_data = {}
@@ -430,9 +477,25 @@ function LoadScript(isPremium)
 
                 local Args = {...}
 
+                local money = GetMoney()
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
-                        print(self.Name)
+                        if self.Name == "Sell" then
+
+                        end
+                        if self.Name == "SkipWave" then
+                            
+                        end
+                        if self.Name == "SummonTower" then
+                            
+                        end
+                        if self.Name == "Upgrade" then
+                            
+                        end
+                        if self.Name == "" then
+                            
+                        end
+                        task.spawn(function() Save() end)
                     end
                 end
 
