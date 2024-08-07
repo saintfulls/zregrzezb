@@ -1,4 +1,3 @@
-
 _G.NowLoaded = false
 
 function LoadScript(isPremium)
@@ -504,7 +503,7 @@ function LoadScript(isPremium)
                         end
                         if self.Name == "SummonTower" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = "No need to()",
+                                [1] = {"No need to()"},
                                 [2] = {
                                     [1] = Args[1],
                                     [2] = Args[2]
