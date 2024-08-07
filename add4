@@ -417,7 +417,7 @@
         function GetWorldEnemies()
             local World
             for i,v in pairs(workspace.Client.Maps:GetChildren()) do
-                for _, world in pairs(workspace.Server.WorldMobs[v]:GetChildren()) do
+                for _, world in pairs(workspace.Server.WorldMobs[v.Name]:GetChildren()) do
                     World = world
                 end
             end
