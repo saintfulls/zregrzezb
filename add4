@@ -414,13 +414,65 @@
         end
     
    
-        
+        function GetWorldEnemies()
+            local World
+            for i,v in pairs(workspace.Client.Maps:GetChildren()) do
+                for _, world in pairs(workspace.Server.WorldMobs[v]:GetChildren()) do
+                    World = world
+                end
+            end
+            return World
+        end
             local EnemiesDD = CreateDropdown("Main", "Enemies", "The enemies of the world you'll be farming on",
             RefreshEnemiesTable(), true, "Enemies", false)
         
         CreateToggle("Main", "Farm Selected", "FarmSelected", function()
             while task.wait() do
-                
+                local World = GetWorldEnemies()
+                local enemies = World:GetChildren()
+                local foundEnemy = nil
+
+                for _, enemy in pairs(enemies) do
+                    for _, enemyName in ipairs(_G.Settings.Enemies) do
+                        if enemy.Name == enemyName and tonumber(enemy:GetAttribute("HP")) > 0 then
+                            foundEnemy = enemy
+                            break
+                        end
+                    end
+                    if foundEnemy then
+                        break
+                    end
+                end
+
+                if foundEnemy then
+                    local character = player.Character
+                    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+    
+                    if humanoidRootPart then
+                        repeat
+                        local InformationText = {
+                                        "Mob: " .. foundEnemy.Name,
+                                        "Health: " .. foundEnemy:GetAttribute("HP"),
+                                        "Status: Mob Farming"
+                                    }
+    
+                                    EnemieParagraph:Set({
+                                        Title = "Current Mob",
+                                        Content = table.concat(InformationText, "\n")
+                                    })
+                            humanoidRootPart.CFrame = foundEnemy.CFrame
+                            
+                            local args = {
+                                [1] = "Attack",
+                                [2] = "Click",
+                                [3] = workspace.Server.WorldMobs:FindFirstChild(World.Name)[foundEnemy.Name]
+                            }
+                            
+                            game:GetService("ReplicatedStorage").Bridge:FireServer(unpack(args))
+                            task.wait()
+                        until tonumber(foundEnemy:GetAttribute("Dead")) == true
+                    end
+                end
             end
     end, false, function()
     
@@ -835,69 +887,7 @@
                 end
             end)
         
-            ---- [[// Settings Tab \\]] -- 
-        --
-            --local SelectConfigDrop
-        --
-            --CreateSection("Settings","Config")
-        --
-            --CreateButton("Settings","Copy Current Config",function()
-            --    local ConfigFile = readfile(MainFolder.."/AnimeDefenders.json")
-        --
-            --    setclipboard(ConfigFile)
-            --end)
-        --
-            --CreateButton("Settings","Copy Selected Config",function()
-            --    local ConfigFile = readfile(configFolder.."/".._G.Settings.SelectedConfig..".json")
-        --
-            --    setclipboard(tostring(ConfigFile))
-            --end)
-        --
-            --SelectConfigDrop = CreateDropdown("Settings","Select Config File","Select the config file you want to use",GetConfigFiles(),false,"SelectedConfig",true,function()
-            --    print(_G.Settings.SelectedConfig)
-            --end)
-        --
-            --CreateInput("Settings","Enter Config Name","Name","ConfigName",true,function()
-            --    task.delay(0,function()
-            --        if _G.Settings.ConfigName ~= "" and _G.Settings.ConfigName ~= " " and tostring(_G.Settings.ConfigName):len() >= 1 then
-            --            writefile(configFolder.."/".._G.Settings.ConfigName..".json", "{}")
-            --
-            --            print("hi?")
-            --            SelectConfigDrop:UpdateOptions(GetConfigFiles())
-            --        end
-            --    end)
-            --end)
-        --
-            --CreateInput("Settings","Input Pastebin or Github URL","URL","ConfigURL",true,function()
-            --    task.delay(0,function()
-            --        if _G.Settings.ConfigURL ~= "" and _G.Settings.ConfigURL ~= " " and tostring(_G.Settings.ConfigURL):len() >= 1 then
-            --            local configData = loadstring(game:HttpGet("https://pastebin.com/raw/rLZ6BL3n"))()
-            --            
-            --            print(configData)
-        --
-            --            writefile(configFolder.."/".._G.Settings.SelectedConfig..".json", HS:JSONEncode(configData))
-            --
-            --            CreateNotification("Macro!","You have successfully saved ".. _G.Settings.SelectedConfig,nil,5)
-            --
-            --            SelectConfigDrop:UpdateOptions(GetConfigFiles())
-            --        end
-            --    end)
-            --end)
-        --
-            --CreateButton("Settings","Apply Selected Config",function()
-            --    if isfile(configFolder.."/".._G.Settings.SelectedConfig..".json") then
-            --        local SelectedConfigFile = readfile(configFolder.."/".._G.Settings.SelectedConfig..".json")
-            --        local ConfigFile = MainFolder.."/AnimeDefenders"
-            --        
-            --        writefile(ConfigFile,SelectedConfigFile)
-        --
-            --        task.wait(.125)
-        --
-            --        Rayfield:LoadConfiguration()
-            --    end
-            --end)
-        --
-            --
+           
             Rayfield:LoadConfiguration()
             task.wait(2)
             _G.NowLoaded = true
