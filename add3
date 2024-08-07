@@ -12,7 +12,7 @@ game_metatable.__namecall = newcclosure(function(self, ...)
     -- for future offset reference.
     -- game:GetService("Workspace")["Don't Care"].Terrain.Base.Part
     if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
-       print(method.." : "..self.Name)
+        print(method.." : "..self.Name)
         print(Args)
     end
 
