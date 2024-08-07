@@ -481,16 +481,46 @@ function LoadScript(isPremium)
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
                         if self.Name == "Sell" then
-
+                            table.insert(Macros[_G.Settings.SelectedMacro], {
+                                [1] = timeElapsed(),
+                                [2] = {
+                                    [1] = Args[1]
+                                    
+                                },
+                                [3] = money
+                            })
                         end
                         if self.Name == "SkipWave" then
-                            
+                            table.insert(Macros[_G.Settings.SelectedMacro], {
+                                [1] = timeElapsed(),
+                                [2] = {
+                                    [1] = Args[1],
+                                    [2] = Args[2]
+                                    
+                                },
+                                [3] = money
+                            })
                         end
                         if self.Name == "SummonTower" then
-                            
+                            table.insert(Macros[_G.Settings.SelectedMacro], {
+                                [1] = timeElapsed(),
+                                [2] = {
+                                    [1] = Args[1],
+                                    [2] = Args[2]
+                                    
+                                },
+                                [3] = money
+                            })
                         end
                         if self.Name == "Upgrade" then
-                            
+                            table.insert(Macros[_G.Settings.SelectedMacro], {
+                                [1] = timeElapsed(),
+                                [2] = {
+                                    [1] = Args[1]
+                                    
+                                },
+                                [3] = money
+                            })
                         end
                         if self.Name == "" then
                             
