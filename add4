@@ -1,0 +1,252 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Anime Strike v1",
+    SubTitle = "by saintfulls",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Tabs = {
+    Main = Window:AddTab({
+        Title = "Main",
+        Icon = "home"
+    }),
+    Autofarm = Window:AddTab({
+        Title = "Autofarm",
+        Icon = "trophy"
+    }),
+    Summon = Window:AddTab({
+        Title = "Summon",
+        Icon = "egg"
+    }),
+    Webhook = Window:AddTab({
+        Title = "Webhook",
+        Icon = "link"
+    }),
+    Misc = Window:AddTab({
+        Title = "Misc",
+        Icon = "globe"
+    }),
+    Settings = Window:AddTab({
+        Title = "Settings",
+        Icon = "settings"
+    })
+}
+
+local Toggles = {}
+_G.SF = {}
+local insertedNumbers = {}
+
+
+
+
+
+local player = game:GetService("Players").LocalPlayer
+
+
+local LPH_NO_VIRTUALIZE
+
+if not LPH_OBFUSCATED then
+    LPH_NO_VIRTUALIZE = function(...)
+        return (...)
+    end;
+end
+
+if not isfolder("WingHub") then
+    makefolder("WingHub")
+end
+
+local MainFolder = "WingHub/" .. game.Players.LocalPlayer.Name
+
+if not isfolder(MainFolder .. "/" .. game.Players.LocalPlayer.Name .. "/AnimeStrike") then
+    makefolder(MainFolder .. "/" .. game.Players.LocalPlayer.Name .. "/AnimeStrike")
+end
+
+local GameFolder = MainFolder .. "/AnimeStrike"
+
+
+if not isfolder(GameFolder .. "/Configs") then
+    makefolder(GameFolder .. "/Configs")
+end
+
+local configFolder = GameFolder .. "/Configs"
+
+local Options = Fluent.Options
+
+function CreateToggle(Tab, Name, SettingsValue, DoFunction, DoAfterFalse)
+    local ToggleNum = #Toggles + 1
+    local randomNum = 0
+    table.insert(Toggles, ToggleNum)
+
+    repeat
+        randomNum = math.random(55, 22222)
+        task.wait(.01)
+    until not table.find(insertedNumbers, randomNum)
+
+    table.insert(insertedNumbers, randomNum)
+
+
+    local Toggle = Tabs[Tab]:AddToggle(SettingsValue, { Title = Name, Default = false })
+
+    Toggle:OnChanged(function()
+        local ab = task.spawn(DoFunction)
+
+        repeat
+            task.wait()
+        until not Options[SettingsValue].Value
+
+        task.cancel(ab)
+
+        if DoAfterFalse then
+            task.spawn(DoAfterFalse)
+        end
+    end)
+
+    return Toggle
+end
+
+function CreateButton(Tab, Name, Description, DoFunction)
+    Tabs[Tab]:AddButton({
+        Title = Name,
+        Description = Description,
+        Callback = function()
+            if DoFunction then
+                task.spawn(DoFunction)
+            end
+        end
+    })
+end
+
+function CreateSlider(Tab, Name, Description, SettingsValue, OptionsTable, DoFunction)
+    local Slider = Tabs[Tab]:AddSlider(SettingsValue, {
+        Title = Name,
+        Description = Description,
+        Default = OptionsTable["Default"],
+        Min = OptionsTable["Min"],
+        Max = OptionsTable["Max"],
+        Rounding = OptionsTable["Rounding"],
+        Callback = function(Value)
+
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+        if DoFunction then
+            task.spawn(DoFunction)
+        end
+    end)
+    return Slider
+end
+
+function CreateDropdown(Tab, Name, SettingsValue, Values, Multi, DoFunction, Function)
+    local Dropdown = Tabs[Tab]:AddDropdown(SettingsValue, {
+        Title = Name,
+        Values = Values,
+        Multi = Multi,
+        Default = 1,
+    })
+
+
+    Dropdown:OnChanged(function(Value)
+        if DoFunction then
+            task.spawn(Function)
+        end
+    end)
+    return Dropdown
+end
+
+function CreateInput(Tab, Name, SettingsValue, Placeholder, DoFunction, Function)
+    local Input = Tabs[Tab]:AddInput(SettingsValue, {
+        Title = Name,
+        Default = "",
+        Placeholder = Placeholder,
+        Numeric = false,  -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+
+        end
+    })
+
+    Input:OnChanged(function()
+        if DoFunction then
+            task.spawn(Function)
+        end
+    end)
+end
+
+function CreateSection(Tab, Name)
+    return Tabs[Tab]:AddSection(Name)
+end
+
+function CreateParagraph(Tab, Name, Content)
+    local Paragraph = Tabs[Tab]:AddParagraph({
+        Title = Name,
+        Content = Content
+    })
+
+    return Paragraph
+end
+
+function SetParagraph(Paragraph, Information)
+    Paragraph:SetDesc(table.concat(Information), "/n")
+end
+
+do
+    -- [[// Main Tab \\]] --
+    
+    function RefreshEnemiesTable()
+        local items = {}
+        local EnemiesTable = {}
+
+        for i, v in pairs(workspace.Client.Maps:GetChildren()) do
+            local id = v.Name
+            if id then -- VÃ©rifie que l'attribut "ID" existe
+                for _, child in pairs(workspace.Server.WorldMobs[id]:GetChildren()) do
+
+                        if child.Name and not items[
+                        child.Name] and child:IsA("BasePart") then
+                            items[child.Name] = true
+                        end
+                    end
+               
+            end
+        end
+
+        for itemName in pairs(items) do
+            table.insert(EnemiesTable, itemName)
+        end
+        return EnemiesTable
+    end
+
+    CreateSection("Main", "Mob Farm")
+
+    local Enemies = {}
+    local MobDD = CreateDropdown("Main", "Enemies", "SelectedEnemies", RefreshEnemiesTable(), true, false)
+
+    local FarmSelected = CreateToggle("Main", "Farm Selected", "AutoFarm", function()
+        while task.wait() do
+
+        end
+    end)
+
+    CreateButton("Main", "Refresh Enemies", "Will refresh the enemies dropdown", function()
+        MobDD:SetValues(RefreshEnemiesTable())
+    end)
+end
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+InterfaceManager:SetFolder(MainFolder)
+SaveManager:SetFolder(configFolder)
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+Window:SelectTab(1)
+SaveManager:LoadAutoloadConfig()
