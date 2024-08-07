@@ -1,106 +1,102 @@
+_G.NowLoaded = false
 
-   
+function LoadScript(isPremium)
+    local Emojis = loadstring(game:HttpGet("https://raw.githubusercontent.com/Odrexyo/main/main/UI/Emojis.lua", true))()
+    local LogoLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vernyfx/Logos/main/Main"))().Logos
 
-    _G.NowLoaded = false
+    local ScriptVersion = "1.0"
 
-    function LoadScript(isPremium)
-        local Emojis = loadstring(game:HttpGet("https://raw.githubusercontent.com/Odrexyo/main/main/UI/Emojis.lua", true))()
-        local LogoLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Vernyfx/Logos/main/Main"))().Logos
-    
-        local ScriptVersion = "1.0"
-    
-        local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/Gfgsbe63j/9dlao4c3b/main/rayfield"))()
-    
-        
-        local ModeText
-        
-        local player = game.Players.LocalPlayer
-        
-        if not isPremium then
-            ModeText = " [<font color='#f0f0f0'>Normal</font>]"
-        else
-            ModeText = " [<font color='#ecd032'>Premium</font>]"
-        end
-        
-        local Window = Rayfield:CreateWindow({
-            Name = "Anime Strike v".. ScriptVersion .. ModeText .. " ".. Emojis.verified,
-            Image = "10734951367",
-            Quote = "Always High Quality!",
-            LoadingTitle = "Anime Strike",
-            LoadingSubtitle = "by Wing Hub",
-            ConfigurationSaving = {
-                Enabled = true,
-                FolderName = "WingHub".. game.Players.LocalPlayer.Name, -- Create a custom folder for your hub/game
-                FileName = "AnimeStrike"
-            },
-            Discord = {
-                Enabled = true,
-                Invite = "2MDPsA8WWs", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-                RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-            };
-        })
-    
-        local Tabs = {
-            Main = Window:CreateTab({ "Main", "home" }),
-            Autofarm = Window:CreateTab({"Autofarm", "trophy" }),
-            Summon = Window:CreateTab({ "Summon", "shopping-bag" }),
-            Webhook = Window:CreateTab({"Webhook","mail"}),
-            Misc = Window:CreateTab({"Misc","globe" }),
-            --Settings = Window:CreateTab("Settings", tonumber(LogoLibrary["settings"])),
+    local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/Gfgsbe63j/9dlao4c3b/main/rayfield"))()
+
+    local ModeText
+
+    local player = game.Players.LocalPlayer
+
+    if not isPremium then
+        ModeText = " [<font color='#f0f0f0'>Normal</font>]"
+    else
+        ModeText = " [<font color='#ecd032'>Premium</font>]"
+    end
+
+    local Window = Rayfield:CreateWindow({
+        Name = "Anime Strike v" .. ScriptVersion .. ModeText .. " " .. Emojis.verified,
+        Image = "10734951367",
+        Quote = "Always High Quality!",
+        LoadingTitle = "Anime Strike",
+        LoadingSubtitle = "by Wing Hub",
+        ConfigurationSaving = {
+            Enabled = true,
+            FolderName = "WingHub" .. game.Players.LocalPlayer.Name, -- Create a custom folder for your hub/game
+            FileName = "AnimeStrike"
+        },
+        Discord = {
+            Enabled = true,
+            Invite = "2MDPsA8WWs", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+            RememberJoins = true -- Set this to false to make them join the discord every time they load it up
         }
-        
-        -- Init
-    
-            -->> Settings
-    
-            _G.Settings = {
-               
-               RankUp = false,
-               FarmSelected = false,
-               Enemies = {},
-               AutoQuest = false,
-               SummonMethod = "",
-               SummonWorld = "",
-               PingUser = false,
-               discordID= "",
-               WebhookLink = "",
-               SendDelay = 3,
-               ResultWebhook = false,
-               TimeRewards = false,
-               Dungeons = {},
-               AutoDungeon = false
-               
-           
-            }
-    
-        local LPH_NO_VIRTUALIZE
-    
-        if not LPH_OBFUSCATED then 
-            LPH_NO_VIRTUALIZE = function(...) return (...) end;
-        end
-    
-        if not isfolder("WingHub/"..game.Players.LocalPlayer.Name) then
-            makefolder("WingHub/"..game.Players.LocalPlayer.Name)
-        end
-    
-        local MainFolder = "WingHub/"..game.Players.LocalPlayer.Name
-    
-        if not isfolder(MainFolder .. "/AnimeStrike") then
-            makefolder(MainFolder .. "/AnimeStrike")
-        end
-    
-        local GameFolder = MainFolder .. "/AnimeStrike"
-    
-    
-        if not isfolder(GameFolder .. "/Configs") then
-            makefolder(GameFolder .. "/Configs")
-        end
-    
-        local configFolder = GameFolder .. "/Configs"
-    
-        function CreateToggleShow()
+    })
+
+    local Tabs = {
+        Main = Window:CreateTab({"Main", "home"}),
+        Autofarm = Window:CreateTab({"Autofarm", "trophy"}),
+        Summon = Window:CreateTab({"Summon", "shopping-bag"}),
+        Webhook = Window:CreateTab({"Webhook", "mail"}),
+        Misc = Window:CreateTab({"Misc", "globe"})
+        -- Settings = Window:CreateTab("Settings", tonumber(LogoLibrary["settings"])),
+    }
+
+    -- Init
+
+    -- >> Settings
+
+    _G.Settings = {
+
+        RankUp = false,
+        FarmSelected = false,
+        Enemies = {},
+        AutoQuest = false,
+        SummonMethod = "",
+        SummonWorld = "",
+        PingUser = false,
+        discordID = "",
+        WebhookLink = "",
+        SendDelay = 3,
+        ResultWebhook = false,
+        TimeRewards = false,
+        Dungeons = {},
+        AutoDungeon = false
+
+    }
+
+    local LPH_NO_VIRTUALIZE
+
+    if not LPH_OBFUSCATED then
+        LPH_NO_VIRTUALIZE = function(...)
+            return (...)
+        end;
+    end
+
+    if not isfolder("WingHub/" .. game.Players.LocalPlayer.Name) then
+        makefolder("WingHub/" .. game.Players.LocalPlayer.Name)
+    end
+
+    local MainFolder = "WingHub/" .. game.Players.LocalPlayer.Name
+
+    if not isfolder(MainFolder .. "/AnimeStrike") then
+        makefolder(MainFolder .. "/AnimeStrike")
+    end
+
+    local GameFolder = MainFolder .. "/AnimeStrike"
+
+    if not isfolder(GameFolder .. "/Configs") then
+        makefolder(GameFolder .. "/Configs")
+    end
+
+    local configFolder = GameFolder .. "/Configs"
+
+    function CreateToggleShow()
         local UIL = {}
-    
+
         -- Create ScreenGui and set properties
         UIL["Screen"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"))
         UIL["Screen"].Name = "Screen"
@@ -117,7 +113,7 @@
         UIL["ImageButton"].BorderColor3 = Color3.fromRGB(0, 0, 0)
         UIL["ImageButton"].Position = UDim2.new(0.5, 0, 0.04, 0)
         UIL["ImageButton"].BackgroundTransparency = 1
-    
+
         -- Create Background Frame inside ImageButton and set properties
         UIL["BG"] = Instance.new("Frame", UIL["ImageButton"])
         UIL["BG"].BorderSizePixel = 0
@@ -127,34 +123,33 @@
         UIL["BG"].BorderColor3 = Color3.fromRGB(0, 0, 0)
         UIL["BG"].Position = UDim2.new(0.5, 0, 0.5, 0)
         UIL["BG"].Name = "BG"
-    
+
         -- Add UIGradient to BG
         UIL["UIGradient"] = Instance.new("UIGradient", UIL["BG"])
-        UIL["UIGradient"].Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(157, 140, 255)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(147, 176, 255))
-        }
-    
+        UIL["UIGradient"].Color = ColorSequence.new {ColorSequenceKeypoint.new(0, Color3.fromRGB(157, 140, 255)),
+                                                     ColorSequenceKeypoint.new(1, Color3.fromRGB(147, 176, 255))}
+
         -- Add UICorner to BG
         UIL["UICorner_BG"] = Instance.new("UICorner", UIL["BG"])
         UIL["UICorner_BG"].CornerRadius = UDim.new(0.1, 0)
-    
+
         -- Add UIStroke to BG
         UIL["UIStroke_BG"] = Instance.new("UIStroke", UIL["BG"])
         UIL["UIStroke_BG"].Color = Color3.fromRGB(56, 0, 84)
         UIL["UIStroke_BG"].Thickness = 3
-    
+
         -- Add UICorner to ImageButton
         UIL["UICorner_ImageButton"] = Instance.new("UICorner", UIL["ImageButton"])
         UIL["UICorner_ImageButton"].CornerRadius = UDim.new(0.1, 0)
-    
+
         -- Create TextLabel inside ImageButton and set properties
         UIL["TextLabel"] = Instance.new("TextLabel", UIL["ImageButton"])
         UIL["TextLabel"].TextWrapped = true
         UIL["TextLabel"].BorderSizePixel = 0
         UIL["TextLabel"].TextScaled = true
         UIL["TextLabel"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        UIL["TextLabel"].FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+        UIL["TextLabel"].FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold,
+            Enum.FontStyle.Normal)
         UIL["TextLabel"].TextSize = 14
         UIL["TextLabel"].TextColor3 = Color3.fromRGB(255, 255, 255)
         UIL["TextLabel"].AnchorPoint = Vector2.new(0.5, 0.5)
@@ -163,432 +158,405 @@
         UIL["TextLabel"].Text = "WING HUB"
         UIL["TextLabel"].BackgroundTransparency = 1
         UIL["TextLabel"].Position = UDim2.new(0.5, 0, 0.5, 0)
-    
+
         -- Add UIStroke to TextLabel
         UIL["UIStroke_TextLabel"] = Instance.new("UIStroke", UIL["TextLabel"])
         UIL["UIStroke_TextLabel"].Color = Color3.fromRGB(32, 32, 32)
         UIL["UIStroke_TextLabel"].Thickness = 3
-    
+
         return UIL["Screen"]
     end
-    
-    
-        if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("Screen") then
-            CreateToggleShow()
-            
-            else 
-            game.Players.LocalPlayer.PlayerGui:FindFirstChild("Screen"):Destroy()
-            CreateToggleShow()
-        end
-    
-        local ToggleButton = game.Players.LocalPlayer.PlayerGui.Screen.ImageButton
-    
-        ToggleButton.MouseButton1Click:Connect(function()
-            local UI
-    
-            for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-                if v.Name == "Rayfield" then
-                    UI = v
-                end
-            end
-            
-            task.wait()
-            UI.Enabled = not UI.Enabled
-        end)
-    
-        local StartLoad = tick()
-    
-        -- Custom UI Functions
-        
-        function CreateSection(Tab,Name)
-            local Tab = Tabs[Tab]
-            return Tab:CreateSection(Name)
-        end
-    
-        local Toggles = {}
-        _G.SF = {}
-        local insertedNumbers = {}
-        
-        function CreateToggle(Tab, Name, SettingsValue, DoFunction, DontSpawn, DoAfterDestroy)
-            local Tab = Tabs[Tab]
-    
-            local ToggleNum = #Toggles + 1
-            local randomNum = 0
-            table.insert(Toggles, ToggleNum)
-        
-            repeat
-        
-                randomNum = math.random(55,22222)
-                task.wait(.01)
-        
-            until not table.find(insertedNumbers, randomNum)
-        
-            table.insert(insertedNumbers, randomNum)
-    
-            local Toggle = Tab:CreateToggle({
-                Name = Name,
-                CurrentValue = _G.Settings[SettingsValue],
-                Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-                Callback = function(Value)
-                    _G.Settings[SettingsValue] = Value
-            
-                    if not _G.SF[randomNum] and _G.Settings[SettingsValue] then
-            
-                        _G.SF[randomNum] = true
-            
-                        if not DontSpawn then
-            
-                            local ab = task.spawn(DoFunction)
-            
-                            repeat
-                                task.wait(.1)
-                            until not _G.Settings[SettingsValue]
-            
-                            task.cancel(ab)
-            
-                            _G.SF[randomNum] = false
-            
-                            if DoAfterDestroy then
-                                task.spawn(DoAfterDestroy)
-                            end
-            
-                        end
-            
-                    end
-                end,
-            })
-            
-            return Toggle
-        end
-    
-    
-        function CreateDropdown(Tab,Name,Description,Options,Multi,SettingsValue,DoFunction,Function)
-            local Curr
-    
-            if Multi then
-                Curr = {}
-            else
-                Curr = ""
-            end
-    
-            local Tab = Tabs[Tab]
-            local Dropdown = Tab:CreateDropdown({
-                Name = Name,
-                Description = Description,
-                Options = Options,
-                CurrentOption = Curr,
-                MultipleOptions = Multi,
-                Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-                Callback = function(Option)
-                    _G.Settings[SettingsValue] = Option
-        
-                    if DoFunction then
-                        task.spawn(Function)
-                    end
-                end,
-            })
-        
-            return Dropdown
-        end
-    
-        function CreateInput(Tab,Name,PlaceholderText,SettingsValue,DoFunction,Function)
-            local Tab = Tabs[Tab]
-            local Input = Tab:CreateInput({
-                Name = Name,
-                PlaceholderText = PlaceholderText,
-                RemoveTextAfterFocusLost = false,
-                Callback = function(Text)
-                    _G.Settings[SettingsValue] = Text
-        
-                    if DoFunction then
-                        task.spawn(Function)
-                    end
-                end,
-            })
-        
-            return Input
-        end
-        
-        function CreateButton(Tab,Name,Function)
-            local Tab = Tabs[Tab]
-            local Button = Tab:CreateButton({
-                Name = Name,
-                Callback = function()
-                    task.spawn(Function)
-                end,
-            })
-        
-            return Button
-        end
-    
-        function CreateSlider(Tab, Name, OptionsTable, Suffix, SettingsValue, DoFunction, Function)
-            local Tab = Tabs[Tab]
-            local Slider = Tab:CreateSlider({
-                Name = Name,
-                Range = {
-                    OptionsTable["Min"], OptionsTable["Max"]
-                },
-                Increment = OptionsTable["Increment"],
-                Suffix = Suffix,
-                CurrentValue = OptionsTable["Default"],
-                Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-                Callback = function(Value)
-                    _G.Settings[SettingsValue] = Value
-    
-                    if DoFunction then
-                        task.spawn(Function)
-                    end
-                end,
-            })
-        
-            return Slider
-        end
-        
-        function CreateLabel(Tab,Name)
-            local Tab = Tabs[Tab]
-            local Label = Tab:CreateLabel(Name)
-    
-            return Label
-        end
-    
-        function CreateParagraph(Tab,Name,Description)
-            local Tab = Tabs[Tab]
-            local Paragraph = Tab:CreateParagraph({Title = Name, Content = Description})
-            
-            return Paragraph
-        end
-        
-        function CreateNotification(Name,Description,Time)
-            return Rayfield:Notify({
-                Title = Name,
-                Content = Description,
-                Duration = Time,
-                Image = 10709753064
-            })
-        end
-        
-        function parseFormattedNumber(str)
-            local number = tonumber(str:match("%d+%,?%.?%d*"))
-            if not number then
-                return nil
-            end
-    
-            if str:match("K") then
-                return number * 1000
-            elseif str:match("M") then
-                return number * 1000000
-            elseif str:match("B") then
-                return number * 1000000000
-            else
-                return number
-            end
-        end
-    
-            -- [[// Main Tab \\]] --
-            CreateSection("Main", "Mob Farm")
-            local EnemieTemplate = {"Mob: None",
-            "Health: None",
-            "Status: None"}
-        local EnemieParagraph = CreateParagraph("Main", "Current Mob", table.concat(EnemieTemplate, "\n"))
-        
-        
-        function RefreshEnemiesTable()
-            local items = {}
-            local EnemiesTable = {}
-    
-            for i, v in pairs(workspace.Client.Maps:GetChildren()) do
-                local id = v.Name
-                if id then -- VÃ©rifie que l'attribut "ID" existe
-                    for _, child in pairs(workspace.Server.WorldMobs[id]:GetChildren()) do
-                        if child.Name and not items[child.Name] and child:IsA("BasePart") then
-                            items[child.Name] = true
-                        end
-                    end
-                end
-            end
-    
-            for itemName in pairs(items) do
-                table.insert(EnemiesTable, itemName)
-            end
-            return EnemiesTable
-        end
-    
-   
-        function GetWorldEnemies()
-            local World
-            for i,v in pairs(workspace.Client.Maps:GetChildren()) do
-                for _, world in pairs(workspace.Server.WorldMobs[v.Name]:GetChildren()) do
-                    World = world
-                end
-            end
-            return World
-        end
-            local EnemiesDD = CreateDropdown("Main", "Enemies", "The enemies of the world you'll be farming on",
-            RefreshEnemiesTable(), true, "Enemies", false)
-        
-        CreateToggle("Main", "Farm Selected", "FarmSelected", function()
-            while task.wait() do
-                local World = GetWorldEnemies()
-                local enemies = World:GetChildren()
-                local foundEnemy = nil
 
-                for _, enemy in pairs(enemies) do
-                    for _, enemyName in ipairs(_G.Settings.Enemies) do
-                        if enemy.Name == enemyName and tonumber(enemy:GetAttribute("HP")) > 0 then
-                            foundEnemy = enemy
-                            break
+    if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("Screen") then
+        CreateToggleShow()
+
+    else
+        game.Players.LocalPlayer.PlayerGui:FindFirstChild("Screen"):Destroy()
+        CreateToggleShow()
+    end
+
+    local ToggleButton = game.Players.LocalPlayer.PlayerGui.Screen.ImageButton
+
+    ToggleButton.MouseButton1Click:Connect(function()
+        local UI
+
+        for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
+            if v.Name == "Rayfield" then
+                UI = v
+            end
+        end
+
+        task.wait()
+        UI.Enabled = not UI.Enabled
+    end)
+
+    local StartLoad = tick()
+
+    -- Custom UI Functions
+
+    function CreateSection(Tab, Name)
+        local Tab = Tabs[Tab]
+        return Tab:CreateSection(Name)
+    end
+
+    local Toggles = {}
+    _G.SF = {}
+    local insertedNumbers = {}
+
+    function CreateToggle(Tab, Name, SettingsValue, DoFunction, DontSpawn, DoAfterDestroy)
+        local Tab = Tabs[Tab]
+
+        local ToggleNum = #Toggles + 1
+        local randomNum = 0
+        table.insert(Toggles, ToggleNum)
+
+        repeat
+
+            randomNum = math.random(55, 22222)
+            task.wait(.01)
+
+        until not table.find(insertedNumbers, randomNum)
+
+        table.insert(insertedNumbers, randomNum)
+
+        local Toggle = Tab:CreateToggle({
+            Name = Name,
+            CurrentValue = _G.Settings[SettingsValue],
+            Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+            Callback = function(Value)
+                _G.Settings[SettingsValue] = Value
+
+                if not _G.SF[randomNum] and _G.Settings[SettingsValue] then
+
+                    _G.SF[randomNum] = true
+
+                    if not DontSpawn then
+
+                        local ab = task.spawn(DoFunction)
+
+                        repeat
+                            task.wait(.1)
+                        until not _G.Settings[SettingsValue]
+
+                        task.cancel(ab)
+
+                        _G.SF[randomNum] = false
+
+                        if DoAfterDestroy then
+                            task.spawn(DoAfterDestroy)
                         end
+
                     end
-                    if foundEnemy then
+
+                end
+            end
+        })
+
+        return Toggle
+    end
+
+    function CreateDropdown(Tab, Name, Description, Options, Multi, SettingsValue, DoFunction, Function)
+        local Curr
+
+        if Multi then
+            Curr = {}
+        else
+            Curr = ""
+        end
+
+        local Tab = Tabs[Tab]
+        local Dropdown = Tab:CreateDropdown({
+            Name = Name,
+            Description = Description,
+            Options = Options,
+            CurrentOption = Curr,
+            MultipleOptions = Multi,
+            Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+            Callback = function(Option)
+                _G.Settings[SettingsValue] = Option
+
+                if DoFunction then
+                    task.spawn(Function)
+                end
+            end
+        })
+
+        return Dropdown
+    end
+
+    function CreateInput(Tab, Name, PlaceholderText, SettingsValue, DoFunction, Function)
+        local Tab = Tabs[Tab]
+        local Input = Tab:CreateInput({
+            Name = Name,
+            PlaceholderText = PlaceholderText,
+            RemoveTextAfterFocusLost = false,
+            Callback = function(Text)
+                _G.Settings[SettingsValue] = Text
+
+                if DoFunction then
+                    task.spawn(Function)
+                end
+            end
+        })
+
+        return Input
+    end
+
+    function CreateButton(Tab, Name, Function)
+        local Tab = Tabs[Tab]
+        local Button = Tab:CreateButton({
+            Name = Name,
+            Callback = function()
+                task.spawn(Function)
+            end
+        })
+
+        return Button
+    end
+
+    function CreateSlider(Tab, Name, OptionsTable, Suffix, SettingsValue, DoFunction, Function)
+        local Tab = Tabs[Tab]
+        local Slider = Tab:CreateSlider({
+            Name = Name,
+            Range = {OptionsTable["Min"], OptionsTable["Max"]},
+            Increment = OptionsTable["Increment"],
+            Suffix = Suffix,
+            CurrentValue = OptionsTable["Default"],
+            Flag = SettingsValue, -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+            Callback = function(Value)
+                _G.Settings[SettingsValue] = Value
+
+                if DoFunction then
+                    task.spawn(Function)
+                end
+            end
+        })
+
+        return Slider
+    end
+
+    function CreateLabel(Tab, Name)
+        local Tab = Tabs[Tab]
+        local Label = Tab:CreateLabel(Name)
+
+        return Label
+    end
+
+    function CreateParagraph(Tab, Name, Description)
+        local Tab = Tabs[Tab]
+        local Paragraph = Tab:CreateParagraph({
+            Title = Name,
+            Content = Description
+        })
+
+        return Paragraph
+    end
+
+    function CreateNotification(Name, Description, Time)
+        return Rayfield:Notify({
+            Title = Name,
+            Content = Description,
+            Duration = Time,
+            Image = 10709753064
+        })
+    end
+
+    function parseFormattedNumber(str)
+        local number = tonumber(str:match("%d+%,?%.?%d*"))
+        if not number then
+            return nil
+        end
+
+        if str:match("K") then
+            return number * 1000
+        elseif str:match("M") then
+            return number * 1000000
+        elseif str:match("B") then
+            return number * 1000000000
+        else
+            return number
+        end
+    end
+
+    -- [[// Main Tab \\]] --
+    CreateSection("Main", "Mob Farm")
+    local EnemieTemplate = {"Mob: None", "Health: None", "Status: None"}
+    local EnemieParagraph = CreateParagraph("Main", "Current Mob", table.concat(EnemieTemplate, "\n"))
+
+    function RefreshEnemiesTable()
+        local items = {}
+        local EnemiesTable = {}
+
+        for i, v in pairs(workspace.Client.Maps:GetChildren()) do
+            local id = v.Name
+            if id then -- VÃ©rifie que l'attribut "ID" existe
+                for _, child in pairs(workspace.Server.WorldMobs[id]:GetChildren()) do
+                    if child.Name and not items[child.Name] and child:IsA("BasePart") then
+                        items[child.Name] = true
+                    end
+                end
+            end
+        end
+
+        for itemName in pairs(items) do
+            table.insert(EnemiesTable, itemName)
+        end
+        return EnemiesTable
+    end
+
+    function GetWorldEnemies()
+        local World
+        for i, v in pairs(workspace.Client.Maps:GetChildren()) do
+
+            local currentworld = workspace.Server.WorldMobs[v.Name]
+            if currentworld then
+                World = currentworld
+            end
+        end
+        return World
+    end
+    local EnemiesDD = CreateDropdown("Main", "Enemies", "The enemies of the world you'll be farming on",
+        RefreshEnemiesTable(), true, "Enemies", false)
+
+    CreateToggle("Main", "Farm Selected", "FarmSelected", function()
+        while task.wait() do
+            local World = GetWorldEnemies()
+            local enemies = World:GetChildren()
+            local foundEnemy = nil
+
+            for _, enemy in pairs(enemies) do
+                for _, enemyName in ipairs(_G.Settings.Enemies) do
+                    if enemy.Name == enemyName and tonumber(enemy:GetAttribute("HP")) > 0 then
+                        foundEnemy = enemy
                         break
                     end
                 end
-
                 if foundEnemy then
-                    local character = player.Character
-                    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
-    
-                    if humanoidRootPart then
-                        repeat
-                        local InformationText = {
-                                        "Mob: " .. foundEnemy.Name,
-                                        "Health: " .. foundEnemy:GetAttribute("HP"),
-                                        "Status: Mob Farming"
-                                    }
-    
-                                    EnemieParagraph:Set({
-                                        Title = "Current Mob",
-                                        Content = table.concat(InformationText, "\n")
-                                    })
-                            humanoidRootPart.CFrame = foundEnemy.CFrame
-                            
-                            local args = {
-                                [1] = "Attack",
-                                [2] = "Click",
-                                [3] = workspace.Server.WorldMobs:FindFirstChild(World.Name)[foundEnemy.Name]
-                            }
-                            
-                            game:GetService("ReplicatedStorage").Bridge:FireServer(unpack(args))
-                            task.wait()
-                        until tonumber(foundEnemy:GetAttribute("Dead")) == true
-                    end
+                    break
                 end
             end
+
+            if foundEnemy then
+                local character = player.Character
+                local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+
+                if humanoidRootPart then
+                    repeat
+                        local InformationText = {"Mob: " .. foundEnemy.Name,
+                                                 "Health: " .. foundEnemy:GetAttribute("HP"), "Status: Mob Farming"}
+
+                        EnemieParagraph:Set({
+                            Title = "Current Mob",
+                            Content = table.concat(InformationText, "\n")
+                        })
+                        humanoidRootPart.CFrame = foundEnemy.CFrame
+
+                        local args = {
+                            [1] = "Attack",
+                            [2] = "Click",
+                            [3] = workspace.Server.WorldMobs:FindFirstChild(World.Name)[foundEnemy.Name]
+                        }
+
+                        game:GetService("ReplicatedStorage").Bridge:FireServer(unpack(args))
+                        task.wait()
+                    until tonumber(foundEnemy:GetAttribute("Dead")) == true
+                end
+            end
+        end
     end, false, function()
-    
-    local InformationText = {
-                                        "Mob: None",
-                                        "Health: None",
-                                        "Status: None"
-                                    }
-    
-                                    EnemieParagraph:Set({
-                                        Title = "Current Mob",
-                                        Content = table.concat(InformationText, "\n")
-                                    })
+
+        local InformationText = {"Mob: None", "Health: None", "Status: None"}
+
+        EnemieParagraph:Set({
+            Title = "Current Mob",
+            Content = table.concat(InformationText, "\n")
+        })
     end)
-    
-    
-            
-            CreateButton("Main", "Refresh Enemies", function()
-            EnemiesDD:UpdateOptions(RefreshEnemiesTable())
-        end)
-        
-      
-        CreateSection("Main", "Quests")
-    
+
+    CreateButton("Main", "Refresh Enemies", function()
+        EnemiesDD:UpdateOptions(RefreshEnemiesTable())
+    end)
+
+    CreateSection("Main", "Quests")
+
     CreateToggle("Main", "Auto Quest", "AutoQuest", function()
         local player = game.Players.LocalPlayer
         local replicatedStorage = game:GetService("ReplicatedStorage")
         local events = replicatedStorage:WaitForChild("Shared"):WaitForChild("events")
         local remoteEvent = events:WaitForChild("RemoteEvent")
         local hud = player.PlayerGui.Hud
-    
+
         while task.wait() do
-           
+
         end
     end, false, function()
-        local InformationText = {
-            "Mob: None",
-            "Health: None",
-            "Status: None"
-        }
-    
+        local InformationText = {"Mob: None", "Health: None", "Status: None"}
+
         EnemieParagraph:Set({
             Title = "Current Mob",
             Content = table.concat(InformationText, "\n")
         })
     end)
-    
-    
-    
-    
-    
-    
-        CreateSection("Main", "Others")
-        
-        CreateToggle("Main", "Auto Claim Time Rewards", "TimeRewards", function()
+
+    CreateSection("Main", "Others")
+
+    CreateToggle("Main", "Auto Claim Time Rewards", "TimeRewards", function()
         while task.wait() do
-            
+
         end
     end)
-    
-        
-        CreateToggle("Main", "Auto Rank Up", "RankUp", function()
+
+    CreateToggle("Main", "Auto Rank Up", "RankUp", function()
         while task.wait() do
         end
-            end)
-                -- [[// Autofarm Tab \\]] --
-                local Dungeons = {}
-    
-    
-    
+    end)
+    -- [[// Autofarm Tab \\]] --
+    local Dungeons = {}
+
     CreateSection("Autofarm", "Dungeon")
     -- Create a dropdown menu for selecting dungeons
-    CreateDropdown("Autofarm", "Dungeon Selected", "The dungeons you'll be farming on", Dungeons, true, "Dungeons", false)
-    
+    CreateDropdown("Autofarm", "Dungeon Selected", "The dungeons you'll be farming on", Dungeons, true, "Dungeons",
+        false)
+
     -- Create a toggle for auto-farming dungeons
     CreateToggle("Autofarm", "Auto Dungeon", "AutoDungeon", function()
         while task.wait() do
-            
+
         end
     end)
-    
-    
-    
-    
-                -- [[// Summon Tab \\]] --
-    
-        CreateSection("Summon", "Stars")
-        local world = {}
-    
-        
-    
-        local Method = {"Open One", "Open Multi"}
-        CreateDropdown("Summon", "World Star", "The world where you are going to open", world, false, "SummonWorld", false)
-    
-        CreateDropdown("Summon", "Method", "How many star you are going to open", Method, false, "SummonMethod", false)
-        CreateToggle("Summon", "Auto Summon", "Summoning", function()
-            local Fired = false
-            while task.wait() do
-            end
-        end)
-            
-                -- [[// Webhook Tab \\]]
-    
-        local HttpService = game:GetService("HttpService")
-    
+
+    -- [[// Summon Tab \\]] --
+
+    CreateSection("Summon", "Stars")
+    local world = {}
+
+    local Method = {"Open One", "Open Multi"}
+    CreateDropdown("Summon", "World Star", "The world where you are going to open", world, false, "SummonWorld", false)
+
+    CreateDropdown("Summon", "Method", "How many star you are going to open", Method, false, "SummonMethod", false)
+    CreateToggle("Summon", "Auto Summon", "Summoning", function()
+        local Fired = false
+        while task.wait() do
+        end
+    end)
+
+    -- [[// Webhook Tab \\]]
+
+    local HttpService = game:GetService("HttpService")
+
     local function webhook()
         local ping = _G.Settings.PingUser
         local userID = _G.Settings.discordID
         local webhookUrl = _G.Settings.WebhookLink
-    
+
         if not ping then
             userID = ""
         end
-    
-        if webhookUrl == "" then return end
-    
+
+        if webhookUrl == "" then
+            return
+        end
+
         local data = {
             ["content"] = userID,
             ["embeds"] = {{
@@ -600,13 +568,12 @@
                 },
                 ["fields"] = {{
                     ["name"] = "Player Stats",
-                    ["value"] = ""
-                    ,
+                    ["value"] = "",
                     ["inline"] = true
                 }}
             }}
         }
-    
+
         local encodedData = HttpService:JSONEncode(data)
         local headers = {
             ["Content-Type"] = "application/json"
@@ -618,304 +585,295 @@
             Method = "POST",
             Headers = headers
         }
-    
+
         pcall(function()
             request(requestData)
         end)
     end
-    
-        CreateSection("Webhook", "Settings")
-        CreateInput("Webhook", "Webhook", "discord url", "WebhookLink", true, function()
-            if _G.Settings.WebhookLink ~= "" then
-            writefile(configFolder.."/WebhookLink", _G.Settings.WebhookLink)
+
+    CreateSection("Webhook", "Settings")
+    CreateInput("Webhook", "Webhook", "discord url", "WebhookLink", true, function()
+        if _G.Settings.WebhookLink ~= "" then
+            writefile(configFolder .. "/WebhookLink", _G.Settings.WebhookLink)
         else
-            if isfile(configFolder.."/WebhookLink") then
-                _G.Settings.WebhookLink = readfile(configFolder.."/WebhookLink")
+            if isfile(configFolder .. "/WebhookLink") then
+                _G.Settings.WebhookLink = readfile(configFolder .. "/WebhookLink")
             end
         end
-        end)
-        CreateInput("Webhook", "Ping User", "userID", "discordID", false)
-        CreateSlider("Webhook", "Send Webhook Delay", {
-            Min = 1,
-            Max = 20,
-            Increment = 1,
-            Default = _G.Settings.SendDelay
-        }, "Minutes", "SendDelay", false)
-    
-        CreateSection("Webhook", "Send")
-    
-        CreateToggle("Webhook", "Result Webhook", "ResultWebhook", function()
-            while task.wait() do
-                webhook()
-                task.wait(_G.Settings.SendDelay * 60)
-            end
-        end)
-    
-        CreateToggle("Webhook", "Ping User", "PingUser", function()
-    
-        end)
-    
-        CreateButton("Webhook", "Test Webhook", function()
-            local Time = os.date("%X")
-            local willBePinged = _G.Settings.PingUser
-            local userID = ""
-            if _G.Settings.discordID ~= "" and willBePinged then
-                userID = string.format("<@%s>", _G.Settings.discordID)
-            end
-            local discordUrl = _G.Settings.WebhookLink
-    
-            local data = {
-                ["content"] = userID,
-                ["embeds"] = {{
-                    ["title"] = 'Anime Strike Simulator',
-                    ['color'] = 11513855,
-                    ['footer'] = {
-                        ['text'] = string.format("// Made by Wing Hub (%s)", Time)
-                    },
-                    ['fields'] = {{
-                        ['name'] = 'Test Webhook',
-                        ['value'] = 'Hi! <3'
-                    }}
-    
+    end)
+    CreateInput("Webhook", "Ping User", "userID", "discordID", false)
+    CreateSlider("Webhook", "Send Webhook Delay", {
+        Min = 1,
+        Max = 20,
+        Increment = 1,
+        Default = _G.Settings.SendDelay
+    }, "Minutes", "SendDelay", false)
+
+    CreateSection("Webhook", "Send")
+
+    CreateToggle("Webhook", "Result Webhook", "ResultWebhook", function()
+        while task.wait() do
+            webhook()
+            task.wait(_G.Settings.SendDelay * 60)
+        end
+    end)
+
+    CreateToggle("Webhook", "Ping User", "PingUser", function()
+
+    end)
+
+    CreateButton("Webhook", "Test Webhook", function()
+        local Time = os.date("%X")
+        local willBePinged = _G.Settings.PingUser
+        local userID = ""
+        if _G.Settings.discordID ~= "" and willBePinged then
+            userID = string.format("<@%s>", _G.Settings.discordID)
+        end
+        local discordUrl = _G.Settings.WebhookLink
+
+        local data = {
+            ["content"] = userID,
+            ["embeds"] = {{
+                ["title"] = 'Anime Strike Simulator',
+                ['color'] = 11513855,
+                ['footer'] = {
+                    ['text'] = string.format("// Made by Wing Hub (%s)", Time)
+                },
+                ['fields'] = {{
+                    ['name'] = 'Test Webhook',
+                    ['value'] = 'Hi! <3'
                 }}
-            }
-    
-            data = HttpService:JSONEncode(data)
-            local headers = {
-                ["content-type"] = "application/json"
-            }
-            local request = http_request or request or HttpPost or syn.request or http.request
-            local dataSend = {
-                Url = discordUrl,
-                Body = data,
-                Method = "POST",
-                Headers = headers
-            }
-            warn("Sending test webhook...")
-    
-            pcall(function()
-                request(dataSend)
-            end)
+
+            }}
+        }
+
+        data = HttpService:JSONEncode(data)
+        local headers = {
+            ["content-type"] = "application/json"
+        }
+        local request = http_request or request or HttpPost or syn.request or http.request
+        local dataSend = {
+            Url = discordUrl,
+            Body = data,
+            Method = "POST",
+            Headers = headers
+        }
+        warn("Sending test webhook...")
+
+        pcall(function()
+            request(dataSend)
         end)
-        
-        
-            -- [[// Misc Tab \\]] --
-    
-            CreateSection("Misc","Main")
-    
-            CreateToggle("Misc", "Hide Name", "HideName",
-            function()
-                while task.wait(.25) do
-        
-                    pcall(function()
-        
-                       
-                    end)
-        
-                    task.wait(.125)
-        
-                end
-        
+    end)
+
+    -- [[// Misc Tab \\]] --
+
+    CreateSection("Misc", "Main")
+
+    CreateToggle("Misc", "Hide Name", "HideName", function()
+        while task.wait(.25) do
+
+            pcall(function()
+
             end)
-        
-            CreateSection("Misc","Other")
-        
-            CreateToggle("Misc", "White Screen (3d rendering disable)", "disable3d",
-            function()
-                while task.wait(.25) do
-        
-                    pcall(function()
-        
-                        local Rendering = true
-                        
-                        if Rendering then
-        
-                            Rendering = false
-        
-                            game:GetService("RunService"):Set3dRenderingEnabled(false)
-                            
-                            task.wait(2.5)
-        
+
+            task.wait(.125)
+
+        end
+
+    end)
+
+    CreateSection("Misc", "Other")
+
+    CreateToggle("Misc", "White Screen (3d rendering disable)", "disable3d", function()
+        while task.wait(.25) do
+
+            pcall(function()
+
+                local Rendering = true
+
+                if Rendering then
+
+                    Rendering = false
+
+                    game:GetService("RunService"):Set3dRenderingEnabled(false)
+
+                    task.wait(2.5)
+
+                end
+
+            end)
+
+            task.wait(.125)
+
+        end
+
+    end, nil, function()
+        Rendering = true
+        game:GetService("RunService"):Set3dRenderingEnabled(true)
+    end)
+
+    _G.Boosting = false
+
+    CreateToggle("Misc", "FPS Booster", "fpsbooster", function()
+        while task.wait(.25) do
+
+            pcall(function()
+
+                if not _G.Boosting then
+
+                    local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
+                    local g = game
+                    local w = g.Workspace
+                    local l = g.Lighting
+                    local t = w.Terrain
+                    sethiddenproperty(l, "Technology", 2)
+                    sethiddenproperty(t, "Decoration", false)
+                    t.WaterWaveSize = 0
+                    t.WaterWaveSpeed = 0
+                    t.WaterReflectance = 0
+                    t.WaterTransparency = 0
+                    l.GlobalShadows = 0
+                    l.FogEnd = 9e9
+                    l.Brightness = 0
+                    settings().Rendering.QualityLevel = "Level01"
+                    for i, v in pairs(w:GetDescendants()) do
+                        if v:IsA("BasePart") and not v:IsA("MeshPart") then
+                            v.Material = "Plastic"
+                            v.Reflectance = 0
+                        elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
+                            v.Transparency = 1
+                        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                            v.Lifetime = NumberRange.new(0)
+                        elseif v:IsA("Explosion") then
+                            v.BlastPressure = 1
+                            v.BlastRadius = 1
+                        elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                            v.Enabled = false
+                        elseif v:IsA("MeshPart") and decalsyeeted then
+                            v.Material = "Plastic"
+                            v.Reflectance = 0
+                            v.TextureID = 10385902758728957
+                        elseif v:IsA("SpecialMesh") and decalsyeeted then
+                            v.TextureId = 0
+                        elseif v:IsA("ShirtGraphic") and decalsyeeted then
+                            v.Graphic = 0
+                        elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+                            v[v.ClassName .. "Template"] = 0
                         end
-        
-                    end)
-        
-                    task.wait(.125)
-        
-                end
-        
-            end, nil, function()
-                Rendering = true
-                game:GetService("RunService"):Set3dRenderingEnabled(true)
-            end)
-        
-            _G.Boosting = false
-        
-            CreateToggle("Misc", "FPS Booster", "fpsbooster",
-            function()
-                while task.wait(.25) do
-        
-                    pcall(function()
-        
-                        if not _G.Boosting then
-        
-                            local decalsyeeted = true -- Leaving this on makes games look shitty but the fps goes up by at least 20.
-                            local g = game
-                            local w = g.Workspace
-                            local l = g.Lighting
-                            local t = w.Terrain
-                            sethiddenproperty(l,"Technology",2)
-                            sethiddenproperty(t,"Decoration",false)
-                            t.WaterWaveSize = 0
-                            t.WaterWaveSpeed = 0
-                            t.WaterReflectance = 0
-                            t.WaterTransparency = 0
-                            l.GlobalShadows = 0
-                            l.FogEnd = 9e9
-                            l.Brightness = 0
-                            settings().Rendering.QualityLevel = "Level01"
-                            for i, v in pairs(w:GetDescendants()) do
-                                if v:IsA("BasePart") and not v:IsA("MeshPart") then
-                                    v.Material = "Plastic"
-                                    v.Reflectance = 0
-                                elseif (v:IsA("Decal") or v:IsA("Texture")) and decalsyeeted then
-                                    v.Transparency = 1
-                                elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-                                    v.Lifetime = NumberRange.new(0)
-                                elseif v:IsA("Explosion") then
-                                    v.BlastPressure = 1
-                                    v.BlastRadius = 1
-                                elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-                                    v.Enabled = false
-                                elseif v:IsA("MeshPart") and decalsyeeted then
-                                    v.Material = "Plastic"
-                                    v.Reflectance = 0
-                                    v.TextureID = 10385902758728957
-                                elseif v:IsA("SpecialMesh") and decalsyeeted  then
-                                    v.TextureId=0
-                                elseif v:IsA("ShirtGraphic") and decalsyeeted then
-                                    v.Graphic=0
-                                elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
-                                    v[v.ClassName.."Template"]=0
-                                end
-                            end
-                            for i = 1,#l:GetChildren() do
-                                e=l:GetChildren()[i]
-                                if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
-                                    e.Enabled = false
-                                end
-                            end
-                            w.DescendantAdded:Connect(function(v)
-                                task.wait()--prevent errors and shit
-                            if v:IsA("BasePart") and not v:IsA("MeshPart") then
-                                    v.Material = "Plastic"
-                                    v.Reflectance = 0
-                                elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
-                                    v.Transparency = 1
-                                elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-                                    v.Lifetime = NumberRange.new(0)
-                                elseif v:IsA("Explosion") then
-                                    v.BlastPressure = 1
-                                    v.BlastRadius = 1
-                                elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
-                                    v.Enabled = false
-                                elseif v:IsA("MeshPart") and decalsyeeted then
-                                    v.Material = "Plastic"
-                                    v.Reflectance = 0
-                                    v.TextureID = 10385902758728957
-                                elseif v:IsA("SpecialMesh") and decalsyeeted then
-                                    v.TextureId=0
-                                elseif v:IsA("ShirtGraphic") and decalsyeeted then
-                                    v.ShirtGraphic=0
-                                elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
-                                    v[v.ClassName.."Template"]=0
-                                end
-                            end)
-        
-                            _G.Boosting = true
-        
-                        end
-        
-                    end)
-        
-                    task.wait(.125)
-        
-                end
-        
-            end)
-        
-            CreateToggle("Misc", "Auto Hide UI On Loadup", "HideUIOnLoadup",nil,true)
-        
-            CreateSection("Misc","Information")
-        
-            function hoursMinsSeconds(n)
-                local hours = math.floor(n/3600)
-                local remaining = n % 3600
-                local minutes = math.floor(remaining/60)
-                remaining = remaining % 60
-                local seconds = remaining
-                if hours < 10 then
-                    hours = "0"..tostring(hours)
-                end
-                if minutes < 10 then
-                    minutes = "0"..tostring(minutes)
-                end
-                if seconds < 10 then
-                    seconds = "0"..tostring(seconds)
-                end
-                
-                return hours..":"..minutes..":"..seconds
-            end
-        
-            local InformationTemplate = {""}
-        
-            local InfoParagraph = CreateParagraph("Misc","Client Information", table.concat(InformationTemplate,"\n"))
-        
-            task.spawn(function()
-                while task.wait(1) do
-                    pcall(function()
-                        local InformationText = {
-                            "Timer: "..  hoursMinsSeconds(math.floor(tick() - StartLoad + 0.5)),
-                            "FPS: " .. tostring(workspace:GetRealPhysicsFPS()),
-                        }
-                
-                        InfoParagraph:Set({
-                            Title = "Client Information",
-                            Content = table.concat(InformationText,"\n")
-                        })
-                    end)
-                end
-            end)
-        
-           
-            Rayfield:LoadConfiguration()
-            task.wait(2)
-            _G.NowLoaded = true
-            CreateNotification("Loaded!","Wing Hub has loaded in ".. tick() - StartLoad .. " seconds.",5)
-            task.wait(1)
-            if _G.Settings.HideUIOnLoadup then
-                local UI
-        
-                for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-                    if v.Name == "Rayfield" then
-                        UI = v
                     end
+                    for i = 1, #l:GetChildren() do
+                        e = l:GetChildren()[i]
+                        if e:IsA("BlurEffect") or e:IsA("SunRaysEffect") or e:IsA("ColorCorrectionEffect") or
+                            e:IsA("BloomEffect") or e:IsA("DepthOfFieldEffect") then
+                            e.Enabled = false
+                        end
+                    end
+                    w.DescendantAdded:Connect(function(v)
+                        task.wait() -- prevent errors and shit
+                        if v:IsA("BasePart") and not v:IsA("MeshPart") then
+                            v.Material = "Plastic"
+                            v.Reflectance = 0
+                        elseif v:IsA("Decal") or v:IsA("Texture") and decalsyeeted then
+                            v.Transparency = 1
+                        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+                            v.Lifetime = NumberRange.new(0)
+                        elseif v:IsA("Explosion") then
+                            v.BlastPressure = 1
+                            v.BlastRadius = 1
+                        elseif v:IsA("Fire") or v:IsA("SpotLight") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                            v.Enabled = false
+                        elseif v:IsA("MeshPart") and decalsyeeted then
+                            v.Material = "Plastic"
+                            v.Reflectance = 0
+                            v.TextureID = 10385902758728957
+                        elseif v:IsA("SpecialMesh") and decalsyeeted then
+                            v.TextureId = 0
+                        elseif v:IsA("ShirtGraphic") and decalsyeeted then
+                            v.ShirtGraphic = 0
+                        elseif (v:IsA("Shirt") or v:IsA("Pants")) and decalsyeeted then
+                            v[v.ClassName .. "Template"] = 0
+                        end
+                    end)
+
+                    _G.Boosting = true
+
                 end
-                
-                task.wait()
-                UI.Enabled = not UI.Enabled
-            end
-            
-            --
-            local vu = game:GetService("VirtualUser")
-            game:GetService("Players").LocalPlayer.Idled:connect(function()
-            vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-            wait(1)
-            vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+
             end)
-            
-    
+
+            task.wait(.125)
+
+        end
+
+    end)
+
+    CreateToggle("Misc", "Auto Hide UI On Loadup", "HideUIOnLoadup", nil, true)
+
+    CreateSection("Misc", "Information")
+
+    function hoursMinsSeconds(n)
+        local hours = math.floor(n / 3600)
+        local remaining = n % 3600
+        local minutes = math.floor(remaining / 60)
+        remaining = remaining % 60
+        local seconds = remaining
+        if hours < 10 then
+            hours = "0" .. tostring(hours)
+        end
+        if minutes < 10 then
+            minutes = "0" .. tostring(minutes)
+        end
+        if seconds < 10 then
+            seconds = "0" .. tostring(seconds)
+        end
+
+        return hours .. ":" .. minutes .. ":" .. seconds
     end
-    
-    
-   LoadScript(true)
+
+    local InformationTemplate = {""}
+
+    local InfoParagraph = CreateParagraph("Misc", "Client Information", table.concat(InformationTemplate, "\n"))
+
+    task.spawn(function()
+        while task.wait(1) do
+            pcall(function()
+                local InformationText = {"Timer: " .. hoursMinsSeconds(math.floor(tick() - StartLoad + 0.5)),
+                                         "FPS: " .. tostring(workspace:GetRealPhysicsFPS())}
+
+                InfoParagraph:Set({
+                    Title = "Client Information",
+                    Content = table.concat(InformationText, "\n")
+                })
+            end)
+        end
+    end)
+
+    Rayfield:LoadConfiguration()
+    task.wait(2)
+    _G.NowLoaded = true
+    CreateNotification("Loaded!", "Wing Hub has loaded in " .. tick() - StartLoad .. " seconds.", 5)
+    task.wait(1)
+    if _G.Settings.HideUIOnLoadup then
+        local UI
+
+        for i, v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
+            if v.Name == "Rayfield" then
+                UI = v
+            end
+        end
+
+        task.wait()
+        UI.Enabled = not UI.Enabled
+    end
+
+    --
+    local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+        vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        wait(1)
+        vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+    end)
+
+end
+
+LoadScript(true)
