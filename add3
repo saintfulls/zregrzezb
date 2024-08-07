@@ -425,27 +425,9 @@ function LoadScript(isPremium)
             0 then
             startTime = os.time()
             startTimeOffset = os.time()
-        else
-            local seconds_offset = tonumber(Split(
-                                                game.Players.LocalPlayer.PlayerGui:WaitForChild(
-                                                    "HUD")
-                                                    :WaitForChild("ModeVoteFrame")
-                                                    .Seconds.Text, " ")[1])
-    
-            if seconds_offset ~= nil then
-                startTime = os.time() + seconds_offset
-                startTimeOffset = os.time() + seconds_offset
-            end
+        
         end
     
-        while true do
-            if not game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD")
-                :WaitForChild("ModeVoteFrame").Visible and GetGameSpeed() > 1 then
-                startTimeOffset = startTimeOffset + (1 * (GetGameSpeed() - 1))
-            end
-            -- print(timeElapsed())
-            task.wait(1)
-        end
     end
 
     function SaveMacros()
@@ -492,7 +474,7 @@ function LoadScript(isPremium)
                         end
                         if self.Name == "SkipWave" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = "Not Yet",
+                                [1] = 42,
                                 [2] = {
                                     [1] = Args[1],
                                     [2] = Args[2]
@@ -503,7 +485,7 @@ function LoadScript(isPremium)
                         end
                         if self.Name == "SummonTower" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = {"No need to()"},
+                                [1] = 23,
                                 [2] = {
                                     [1] = Args[1],
                                     [2] = Args[2]
