@@ -24,7 +24,7 @@ function LoadScript(isPremium)
         LoadingSubtitle = "by Wing Hub",
         ConfigurationSaving = {
             Enabled = true,
-            FolderName = "WingHub/" .. game.Players.LocalPlayer.Name.."/FNTD", -- Create a custom folder for your hub/game
+            FolderName = "WingHub/" .. game.Players.LocalPlayer.Name .. "/FNTD", -- Create a custom folder for your hub/game
             FileName = "Settings"
         },
         Discord = {
@@ -83,11 +83,11 @@ function LoadScript(isPremium)
         end;
     end
 
-    if not isfolder("WingHub/".. player.Name ) then
-        makefolder("WingHub/".. player.Name )
+    if not isfolder("WingHub/" .. player.Name) then
+        makefolder("WingHub/" .. player.Name)
     end
 
-    local MainFolder = "WingHub/"..player.Name
+    local MainFolder = "WingHub/" .. player.Name
 
     if not isfolder(MainFolder .. "/FNTD") then
         makefolder(MainFolder .. "/FNTD")
@@ -109,9 +109,8 @@ function LoadScript(isPremium)
 
     for _, file in pairs(listfiles(macroFolder)) do
         if not pcall(function()
-            local json_content = game:GetService("HttpService"):JSONDecode(readfile(
-                                                                               file))
-    
+            local json_content = game:GetService("HttpService"):JSONDecode(readfile(file))
+
             for k, v in pairs(json_content) do
                 if Macros[k] ~= nil then
                     delfile(file)
@@ -119,7 +118,9 @@ function LoadScript(isPremium)
                     Macros[k] = v
                 end
             end
-        end) then print("Error reading file: " .. file) end
+        end) then
+            print("Error reading file: " .. file)
+        end
     end
 
     function refreshMacrosList()
@@ -417,30 +418,30 @@ function LoadScript(isPremium)
     end
 
     function StartMacroTimer()
-        repeat task.wait() until game.Players.LocalPlayer.PlayerGui:WaitForChild(
-            "HUD"):WaitForChild("ModeVoteFrame").Visible or
+        repeat
+            task.wait()
+        until game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("ModeVoteFrame").Visible or
             game:GetService("ReplicatedStorage"):WaitForChild("WaveValue").Value > 0
-    
-        if game:GetService("ReplicatedStorage"):FindFirstChild("WaveValue").Value >
-            0 then
+
+        if game:GetService("ReplicatedStorage"):FindFirstChild("WaveValue").Value > 0 then
             startTime = os.time()
             startTimeOffset = os.time()
-        
+
         end
-    
+
     end
 
     function SaveMacros()
         for profile_name, macro_table in pairs(Macros) do
             local save_data = {}
             save_data[profile_name] = macro_table
-            writefile(macroFolder .. "\\" .. profile_name .. ".json", 
-            game:GetService("HttpService"):JSONEncode(save_data))
+            writefile(macroFolder .. "\\" .. profile_name .. ".json",
+                game:GetService("HttpService"):JSONEncode(save_data))
         end
     end
-    
+
     function Save()
-        writefile(MainFolder.."Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
+        writefile(MainFolder .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
         SaveMacros()
     end
 
@@ -448,79 +449,80 @@ function LoadScript(isPremium)
 
     function GetMoney()
         local money = player:WaitForChild("Money", math.huge) -- waits indefinitely until "Money" is created
-        
+
         return money.Value or nil
     end
 
     local game_metatable = getrawmetatable(game)
-            local namecall_original = game_metatable.__namecall
+    local namecall_original = game_metatable.__namecall
 
-            setreadonly(game_metatable, false)
+    setreadonly(game_metatable, false)
 
-           
-            game_metatable.__namecall = newcclosure(function(self, ...)
-                local method = getnamecallmethod()
-                local script = getcallingscript()
+    game_metatable.__namecall = newcclosure(function(self, ...)
+        local method = getnamecallmethod()
+        local script = getcallingscript()
 
-                local Args = {...}
+        local Args = {...}
 
-                local money = 0
-                
-                
-                if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
-                    if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
+        if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
+            if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
+                local money = nil
 
-                        if self.Name == "Sell" then
-                            table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = timeElapsed(),
-                                [2] = {
-                                    [1] = Args[1]
-                                    
-                                },
-                                [3] = money
-                            })
-                        end
-                        if self.Name == "SkipWave" then
-                            table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = 42,
-                                [2] = {
-                                    [1] = Args[1],
-                                    [2] = Args[2]
-                                    
-                                },
-                                [3] = money
-                            })
-                        end
-                        if self.Name == "SummonTower" then
-                            table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = 23,
-                                [2] = {
-                                    [1] = Args[1],
-                                    [2] = Args[2]
-                                    
-                                },
-                                [3] = money
-                            })
-                        end
-                        if self.Name == "Upgrade" then
-                            table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = timeElapsed(),
-                                [2] = {
-                                    [1] = Args[1]
-                                    
-                                },
-                                [3] = money
-                            })
-                        end
-                        if self.Name == "" then
-                            
-                        end
-                        task.spawn(function() Save() end)
-                    end
+                money = GetMoney()
+
+                if self.Name == "Sell" then
+                    table.insert(Macros[_G.Settings.SelectedMacro], {
+                        [1] = timeElapsed(),
+                        [2] = {
+                            [1] = Args[1]
+
+                        },
+                        [3] = money
+                    })
                 end
+                if self.Name == "SkipWave" then
+                    table.insert(Macros[_G.Settings.SelectedMacro], {
+                        [1] = 42,
+                        [2] = {
+                            [1] = Args[1],
+                            [2] = Args[2]
 
-                return namecall_original(self, ...)
-            end)
+                        },
+                        [3] = money
+                    })
+                end
+                if self.Name == "SummonTower" then
+                    table.insert(Macros[_G.Settings.SelectedMacro], {
+                        [1] = 23,
+                        [2] = {
+                            [1] = Args[1],
+                            [2] = Args[2]
+
+                        },
+                        [3] = money
+                    })
+                end
+                if self.Name == "Upgrade" then
+                    table.insert(Macros[_G.Settings.SelectedMacro], {
+                        [1] = timeElapsed(),
+                        [2] = {
+                            [1] = Args[1]
+
+                        },
+                        [3] = money
+                    })
+                end
+                if self.Name == "" then
+
+                end
+                task.spawn(function()
+                    Save()
+                end)
+            end
+        end
+
+        return namecall_original(self, ...)
+    end)
 
     local Maps = {"1", "2", "3"}
 
@@ -584,15 +586,17 @@ function LoadScript(isPremium)
     CreateSection("Macro", "Config")
 
     local MacroDropdown = CreateDropdown("Macro", "Selected Macro", "The macro you'll use", refreshMacrosList(), false,
-        "SelectedMacro", true, function ()
-            if Macros[_G.Settings.SelectedMacro] == nil then Macros[_G.Settings.SelectedMacro] = {} end
+        "SelectedMacro", true, function()
+            if Macros[_G.Settings.SelectedMacro] == nil then
+                Macros[_G.Settings.SelectedMacro] = {}
+            end
         end)
 
     CreateInput("Macro", "Macro Name", "Name", "MacroName", false)
 
     CreateButton("Macro", "Create Macro", function()
         writefile(macroFolder .. "/" .. _G.Settings.MacroName .. ".json", HttpService:JSONEncode({}))
-        
+
         MacroDropdown:UpdateOptions(refreshMacrosList())
         Macros[_G.Settings.SelectedMacro] = {}
         MacroDropdown.CurrentOption = _G.Settings.SelectedMacro
@@ -607,7 +611,7 @@ function LoadScript(isPremium)
 
     local RecordMacro = CreateToggle("Macro", "Record Macro", "MacroRecording", function()
         while task.wait() do
-            
+
         end
     end)
 
