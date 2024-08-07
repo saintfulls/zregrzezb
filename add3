@@ -216,6 +216,10 @@ function LoadScript(isPremium)
         return UIL["Screen"]
     end
 
+    function stringToCFrame(input)
+        return CFrame.new(unpack(game:GetService("HttpService"):JSONDecode("[" .. input .. "]")))
+    end
+
     if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("Screen") then
         CreateToggleShow()
     else
@@ -441,11 +445,9 @@ function LoadScript(isPremium)
     end
 
     function Save()
-        writefile(MainFolder.."/" .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
+        writefile(MainFolder .. "/" .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
         SaveMacros()
     end
-
-    
 
     function GetMoney()
         return player.Money.Value
@@ -494,17 +496,18 @@ function LoadScript(isPremium)
                         [1] = 23,
                         [2] = {
                             [1] = Args[1],
-                            [2] = Args[2]
+                            [2] = tostring(Args[2])
 
                         },
                         [3] = money
                     })
                 end
                 if self.Name == "Upgrade" then
+                    local unit = Args[1]
                     table.insert(Macros[_G.Settings.SelectedMacro], {
                         [1] = timeElapsed(),
                         [2] = {
-                            [1] = Args[1]
+                            [1] = unit
 
                         },
                         [3] = money
@@ -596,8 +599,8 @@ function LoadScript(isPremium)
         writefile(macroFolder .. "/" .. _G.Settings.MacroName .. ".json", HttpService:JSONEncode({}))
 
         MacroDropdown:UpdateOptions(refreshMacrosList())
+        MacroDropdown:Set(_G.Settings.MacroName)
         Macros[_G.Settings.SelectedMacro] = {}
-        MacroDropdown:Set(_G.Settings.SelectedMacro)
     end)
 
     CreateButton("Macro", "Delete Macro", function()
