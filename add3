@@ -4,6 +4,10 @@ local namecall_original = game_metatable.__namecall
 setreadonly(game_metatable, false)
 
 game_metatable.__namecall = newcclosure(function(self, ...)
+        return namecall_original(self, ...)
+end)
+
+game_metatable.__namecall = newcclosure(function(self, ...)
     local method = getnamecallmethod()
     local script = getcallingscript()
 
