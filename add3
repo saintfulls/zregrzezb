@@ -454,6 +454,7 @@ function LoadScript(isPremium)
 
             setreadonly(game_metatable, false)
 
+           
             game_metatable.__namecall = newcclosure(function(self, ...)
                 local method = getnamecallmethod()
                 local script = getcallingscript()
@@ -462,11 +463,16 @@ function LoadScript(isPremium)
 
                 local money 
                 
+                repeat
+                    task.wait()
+                until GetMoney()
+
+                money = GetMoney()
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
-                        print(Macros[1])
+
                         if self.Name == "Sell" then
-                            table.insert(Macros[_G.Settings.SelectedMacro..".json"], {
+                            table.insert(Macros[_G.Settings.SelectedMacro], {
                                 [1] = timeElapsed(),
                                 [2] = {
                                     [1] = Args[1]
@@ -579,14 +585,18 @@ function LoadScript(isPremium)
     CreateSection("Macro", "Config")
 
     local MacroDropdown = CreateDropdown("Macro", "Selected Macro", "The macro you'll use", refreshMacrosList(), false,
-        "SelectedMacro", false)
+        "SelectedMacro", true, function ()
+            if Macros[_G.Settings.SelectedMacro] == nil then Macros[_G.Settings.SelectedMacro] = {} end
+        end)
 
     CreateInput("Macro", "Macro Name", "Name", "MacroName", false)
 
     CreateButton("Macro", "Create Macro", function()
         writefile(macroFolder .. "/" .. _G.Settings.MacroName .. ".json", HttpService:JSONEncode({}))
-
+        
         MacroDropdown:UpdateOptions(refreshMacrosList())
+        Macros[_G.Settings.SelectedMacro] = {}
+        MacroDropdown.CurrentOption = _G.Settings.SelectedMacro
     end)
 
     CreateButton("Macro", "Delete Macro", function()
