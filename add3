@@ -597,7 +597,7 @@ function LoadScript(isPremium)
 
         MacroDropdown:UpdateOptions(refreshMacrosList())
         Macros[_G.Settings.SelectedMacro] = {}
-        MacroDropdown.CurrentOption = _G.Settings.SelectedMacro
+        MacroDropdown:Set(_G.Settings.SelectedMacro)
     end)
 
     CreateButton("Macro", "Delete Macro", function()
