@@ -460,7 +460,11 @@ function LoadScript(isPremium)
 
                 local Args = {...}
 
-                local money = GetMoney()
+                local money 
+                
+                if player.Money then
+                    money = GetMoney()
+                end
                 if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
                         print(Macros[1])
