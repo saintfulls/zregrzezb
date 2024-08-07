@@ -492,7 +492,7 @@ function LoadScript(isPremium)
                         end
                         if self.Name == "SkipWave" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = timeElapsed(),
+                                [1] = "Not Yet",
                                 [2] = {
                                     [1] = Args[1],
                                     [2] = Args[2]
@@ -503,7 +503,7 @@ function LoadScript(isPremium)
                         end
                         if self.Name == "SummonTower" then
                             table.insert(Macros[_G.Settings.SelectedMacro], {
-                                [1] = "timeElapsed()",
+                                [1] = "No need to()",
                                 [2] = {
                                     [1] = Args[1],
                                     [2] = Args[2]
