@@ -24,7 +24,7 @@ function LoadScript(isPremium)
         LoadingSubtitle = "by Wing Hub",
         ConfigurationSaving = {
             Enabled = true,
-            FolderName = "WingHub/" .. game.Players.LocalPlayer.Name, -- Create a custom folder for your hub/game
+            FolderName = "WingHub" .. game.Players.LocalPlayer.Name, -- Create a custom folder for your hub/game
             FileName = "FNTD"
         },
         Discord = {
@@ -83,11 +83,11 @@ function LoadScript(isPremium)
         end;
     end
 
-    if not isfolder("WingHub/" .. game.Players.LocalPlayer.Name) then
-        makefolder("WingHub/" .. game.Players.LocalPlayer.Name)
+    if not isfolder("WingHub" ) then
+        makefolder("WingHub" )
     end
 
-    local MainFolder = "WingHub/" .. game.Players.LocalPlayer.Name
+    local MainFolder = "WingHub" 
 
     if not isfolder(MainFolder .. "/FNTD") then
         makefolder(MainFolder .. "/FNTD")
