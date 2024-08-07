@@ -434,8 +434,8 @@ function LoadScript(isPremium)
         for profile_name, macro_table in pairs(Macros) do
             local save_data = {}
             save_data[profile_name] = macro_table
-            writefile(macroFolder .. "\\" .. profile_name .. ".json",
-                game:GetService("HttpService"):JSONEncode(save_data))
+            writefile(macroFolder .. "\\" .. profile_name .. ".json", 
+            game:GetService("HttpService"):JSONEncode(save_data))
         end
     end
     
@@ -461,7 +461,7 @@ function LoadScript(isPremium)
                 local Args = {...}
 
                 local money 
-                
+
                 if player.Money then
                     money = GetMoney()
                 end
@@ -469,7 +469,7 @@ function LoadScript(isPremium)
                     if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
                         print(Macros[1])
                         if self.Name == "Sell" then
-                            table.insert(Macros[_G.Settings.SelectedMacro], {
+                            table.insert(Macros[_G.Settings.SelectedMacro..".json"], {
                                 [1] = timeElapsed(),
                                 [2] = {
                                     [1] = Args[1]
