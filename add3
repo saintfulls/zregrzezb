@@ -422,12 +422,15 @@ function LoadScript(isPremium)
     end
 
     function StartMacroTimer()
+
+        if not player.PlayerGui.GameSelection.GameSelectionFrame or player.PlayerGui.GameSelection.EndlessGameSelection then return end
         repeat
             task.wait()
-        until game.Players.LocalPlayer.PlayerGui:WaitForChild("HUD"):WaitForChild("ModeVoteFrame").Visible or
-            game:GetService("ReplicatedStorage"):WaitForChild("WaveValue").Value > 0
+        until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
+        not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
 
-        if game:GetService("ReplicatedStorage"):FindFirstChild("WaveValue").Value > 0 then
+        if not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
+        not player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
             startTime = os.time()
             startTimeOffset = os.time()
 
@@ -445,12 +448,75 @@ function LoadScript(isPremium)
     end
 
     function Save()
-        writefile(MainFolder .. "/" .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
+        writefile(GameFolder .. "/" .. "Settings.json", game:GetService("HttpService"):JSONEncode(_G.Settings))
         SaveMacros()
     end
 
     function GetMoney()
         return player.Money.Value
+    end
+
+
+    function MacroPlayback()
+        -- check if its in game first or not and if money exists.
+        repeat task.wait() until game.Players.LocalPlayer:FindFirstChild("Money") ~=
+            nil
+    
+        -- sort recorded macro before using it.
+        table.sort(Macros[_G.Settings.SelectedMacro], function(a, b) return a[1] < b[1] end)
+    
+        for _, v in pairs(Macros[_G.Settings.SelectedMacro]) do
+            local time = v[1]
+            local remote_arguments = v[2]
+            local money = v[3]
+    
+            -- money tracking (to be removed)
+            if money ~= nil then
+                repeat task.wait() until GetMoney() >= money
+            end
+    
+            repeat
+                task.wait()
+                -- if action happened before wave started, can execute all at once.
+            until timeElapsed() >= time or time < 0
+    
+            if not JSON.macro_playback then return end
+    
+            local action = v[4]
+            local parameters = remote_arguments
+    
+            if action == "SummonTower" then
+                local args = {
+                    [1] = parameters[1],
+                    [2] = stringToCFrame(parameters[2])
+                }
+                
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Towers"):WaitForChild("SummonTower"):FireServer(unpack(args))
+            end
+    
+            if action == "Sell" then
+                function getNil(name,class) for _,v in next, getnilinstances() do if v.ClassName==class and v.Name==name then return v;end end end
+
+                local args = {
+                    
+                }
+            end
+    
+            
+            if (action == "VoteWaveConfirm" and JSON.macro_skipwave) then
+                task.spawn(function()
+                    repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD
+                        .ModeVoteFrame.Visible
+    
+                    local args = {[1] = action}
+    
+                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer(
+                        unpack(args))
+                end)
+            end
+    
+            task.wait(0.24)
+        end
     end
 
     local game_metatable = getrawmetatable(game)
@@ -466,6 +532,12 @@ function LoadScript(isPremium)
 
         if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
             if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
+
+                repeat task.wait() until player.Money
+                repeat
+                    task.wait()
+                until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
+                not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
                 local money = nil
 
                 money = GetMoney()
@@ -477,40 +549,44 @@ function LoadScript(isPremium)
                             [1] = Args[1]
 
                         },
-                        [3] = money
+                        [3] = money,
+                        [4] = self.Name
                     })
                 end
                 if self.Name == "SkipWave" then
                     table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = 42,
+                        [1] = timeElapsed(),
                         [2] = {
                             [1] = Args[1],
                             [2] = Args[2]
 
                         },
-                        [3] = money
+                        [3] = money,
+                        [4] = self.Name
                     })
                 end
                 if self.Name == "SummonTower" then
                     table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = 23,
+                        [1] = timeElapsed(),
                         [2] = {
                             [1] = Args[1],
                             [2] = tostring(Args[2])
 
                         },
-                        [3] = money
+                        [3] = money,
+                        [4] = self.Name
                     })
                 end
                 if self.Name == "Upgrade" then
-                    local unit = Args[1]
+                    
                     table.insert(Macros[_G.Settings.SelectedMacro], {
                         [1] = timeElapsed(),
                         [2] = {
-                            [1] = tostring(unit)
+                            [1] = tostring(Args[1])
 
                         },
-                        [3] = money
+                        [3] = money,
+                        [4] = self.Name
                     })
                 end
                 if self.Name == "" then
@@ -525,6 +601,8 @@ function LoadScript(isPremium)
         return namecall_original(self, ...)
     end)
 
+    task.spawn(StartMacroTimer)
+
     local Maps = {"1", "2", "3"}
 
     local Levels = {"1", "2", "3", "4", "5", "6"}
@@ -532,12 +610,6 @@ function LoadScript(isPremium)
 
     local LevelDD = CreateDropdown("Main", "Level", "Select the level you will be playing", Levels, false,
         "SelectedLevel", false)
-    CreateToggle("Main", "Friends Only", "FriendsOnly", function()
-        local Fired = false
-        while task.wait() do
-
-        end
-    end)
 
     CreateToggle("Main", "Auto Join Map", "AutoJoin", function()
         while task.wait() do
@@ -553,12 +625,18 @@ function LoadScript(isPremium)
 
     CreateToggle("Main", "Auto Start", "AutoStart", function()
         while task.wait() do
-
+            if player.PlayerGui.GameSelection.GameSelectionFrame.Visible or player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
+                local args = {
+                    [1] = _G.Settings.SelectedMap,
+                    [2] = tonumber(_G.Settings.SelectedLevel),
+                    [3] = 1
+                }
+            end
         end
     end)
     CreateSection("Main", "Game")
 
-    CreateToggle("Main", "Auto Retry", "AutoRetry", function()
+    CreateToggle("Main", "Auto Retry", "ReplayGame", function()
 
         while task.wait() do
 
