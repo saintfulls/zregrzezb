@@ -421,9 +421,9 @@ function LoadScript(isPremium)
         end
     end
 
-    function StartMacroTimer()
+    local function StartMacroTimer()
 
-        if not player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or
+        if player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or
             player.PlayerGui.GameSelection.EndlessGameSelection ~= nil then
             return
         end
@@ -558,58 +558,58 @@ function LoadScript(isPremium)
                 local money = nil
 
                 money = GetMoney()
-                if self.Name == "Sell" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1]
+                if self.Name ~= "StopSetting" then
+                    if self.Name == "Sell" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1]
 
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+                    if self.Name == "SkipWave" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1],
+                                [2] = Args[2]
+
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+                    if self.Name == "SummonTower" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1],
+                                [2] = tostring(Args[2])
+
+                            },
+                            [3] = money
+                        })
+                    end
+                    if self.Name == "Upgrade" then
+
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = tostring(Args[1])
+
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+
+                    task.spawn(function()
+                        Save()
+                    end)
                 end
-                if self.Name == "SkipWave" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1],
-                            [2] = Args[2]
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-                if self.Name == "SummonTower" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1],
-                            [2] = tostring(Args[2])
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-                if self.Name == "Upgrade" then
-
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = tostring(Args[1])
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-
-                task.spawn(function()
-                    Save()
-                end)
-
             end
         end
 
@@ -697,7 +697,7 @@ function LoadScript(isPremium)
         Macros[_G.Settings.SelectedMacro] = {}
     end)
 
-    CreateButton("Macro", "Clear Macro", function ()
+    CreateButton("Macro", "Clear Macro", function()
         writefile(macroFolder .. "/" .. _G.Settings.SelectedMacro .. ".json", HttpService:JSONEncode({}))
     end)
 
@@ -725,14 +725,16 @@ function LoadScript(isPremium)
             if _G.Settings.MacroPlaying then
                 PlayMacro:Set(false)
             end
-        elseif _G.Settings.MacroPlaying then
+        end
+
+        if _G.Settings.MacroPlaying then
             if _G.Settings.MacroRecording then
                 RecordMacro:Set(false)
             end
         end
         wait()
     end
-    
+
     -- [[// Misc Tab \\]] --
 
     CreateSection("Misc", "Main")
