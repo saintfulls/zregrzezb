@@ -423,7 +423,7 @@ function LoadScript(isPremium)
 
     function StartMacroTimer()
 
-        if not player.PlayerGui.GameSelection.GameSelectionFrame or player.PlayerGui.GameSelection.EndlessGameSelection then return end
+        if not player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or player.PlayerGui.GameSelection.EndlessGameSelection ~= nil then return end
         repeat
             task.wait()
         until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
@@ -533,7 +533,7 @@ function LoadScript(isPremium)
         if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
             if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
 
-                repeat task.wait() until player.Money
+                repeat task.wait() until player.Money ~= nil
                 repeat
                     task.wait()
                 until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
