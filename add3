@@ -423,14 +423,17 @@ function LoadScript(isPremium)
 
     function StartMacroTimer()
 
-        if not player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or player.PlayerGui.GameSelection.EndlessGameSelection ~= nil then return end
+        if not player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or
+            player.PlayerGui.GameSelection.EndlessGameSelection ~= nil then
+            return
+        end
         repeat
             task.wait()
-        until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
-        not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
+        until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+            not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
 
-        if not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
-        not player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
+        if not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+            not player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
             startTime = os.time()
             startTimeOffset = os.time()
 
@@ -456,65 +459,77 @@ function LoadScript(isPremium)
         return player.Money.Value
     end
 
-
     function MacroPlayback()
         -- check if its in game first or not and if money exists.
-        repeat task.wait() until game.Players.LocalPlayer:FindFirstChild("Money") ~=
-            nil
-    
+        repeat
+            task.wait()
+        until game.Players.LocalPlayer:FindFirstChild("Money") ~= nil
+
         -- sort recorded macro before using it.
-        table.sort(Macros[_G.Settings.SelectedMacro], function(a, b) return a[1] < b[1] end)
-    
+        table.sort(Macros[_G.Settings.SelectedMacro], function(a, b)
+            return a[1] < b[1]
+        end)
+
         for _, v in pairs(Macros[_G.Settings.SelectedMacro]) do
             local time = v[1]
             local remote_arguments = v[2]
             local money = v[3]
-    
+
             -- money tracking (to be removed)
             if money ~= nil then
-                repeat task.wait() until GetMoney() >= money
+                repeat
+                    task.wait()
+                until GetMoney() >= money
             end
-    
+
             repeat
                 task.wait()
                 -- if action happened before wave started, can execute all at once.
             until timeElapsed() >= time or time < 0
-    
-            if not JSON.macro_playback then return end
-    
+
+            if not JSON.macro_playback then
+                return
+            end
+
             local action = v[4]
             local parameters = remote_arguments
-    
+
             if action == "SummonTower" then
                 local args = {
                     [1] = parameters[1],
                     [2] = stringToCFrame(parameters[2])
                 }
-                
-                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Towers"):WaitForChild("SummonTower"):FireServer(unpack(args))
-            end
-    
-            if action == "Sell" then
-                function getNil(name,class) for _,v in next, getnilinstances() do if v.ClassName==class and v.Name==name then return v;end end end
 
-                local args = {
-                    
-                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Towers"):WaitForChild(
+                    "SummonTower"):FireServer(unpack(args))
             end
-    
-            
+
+            if action == "Sell" then
+                function getNil(name, class)
+                    for _, v in next, getnilinstances() do
+                        if v.ClassName == class and v.Name == name then
+                            return v;
+                        end
+                    end
+                end
+
+                local args = {}
+            end
+
             if (action == "VoteWaveConfirm" and JSON.macro_skipwave) then
                 task.spawn(function()
-                    repeat task.wait() until game.Players.LocalPlayer.PlayerGui.HUD
-                        .ModeVoteFrame.Visible
-    
-                    local args = {[1] = action}
-    
-                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer(
-                        unpack(args))
+                    repeat
+                        task.wait()
+                    until game.Players.LocalPlayer.PlayerGui.HUD.ModeVoteFrame.Visible
+
+                    local args = {
+                        [1] = action
+                    }
+
+                    game:GetService("ReplicatedStorage").Remotes.Input:FireServer(unpack(args))
                 end)
             end
-    
+
             task.wait(0.24)
         end
     end
@@ -533,68 +548,69 @@ function LoadScript(isPremium)
         if Args ~= nil and (method == "FireServer" or method == "InvokeServer") then
             if _G.Settings.MacroRecording and not _G.Settings.MacroPlaying then
 
-                repeat task.wait() until player.Money ~= nil
                 repeat
                     task.wait()
-                until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or 
-                not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
+                until player.Money ~= nil
+                repeat
+                    task.wait()
+                until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+                    not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
                 local money = nil
 
                 money = GetMoney()
+                if self.Name ~= "StopSetting" then
+                    if self.Name == "Sell" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1]
 
-                if self.Name == "Sell" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1]
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+                    if self.Name == "SkipWave" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1],
+                                [2] = Args[2]
 
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+                    if self.Name == "SummonTower" then
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = Args[1],
+                                [2] = tostring(Args[2])
+
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+                    if self.Name == "Upgrade" then
+
+                        table.insert(Macros[_G.Settings.SelectedMacro], {
+                            [1] = timeElapsed(),
+                            [2] = {
+                                [1] = tostring(Args[1])
+
+                            },
+                            [3] = money,
+                            [4] = self.Name
+                        })
+                    end
+            
+                    task.spawn(function()
+                        Save()
+                    end)
                 end
-                if self.Name == "SkipWave" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1],
-                            [2] = Args[2]
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-                if self.Name == "SummonTower" then
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = Args[1],
-                            [2] = tostring(Args[2])
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-                if self.Name == "Upgrade" then
-                    
-                    table.insert(Macros[_G.Settings.SelectedMacro], {
-                        [1] = timeElapsed(),
-                        [2] = {
-                            [1] = tostring(Args[1])
-
-                        },
-                        [3] = money,
-                        [4] = self.Name
-                    })
-                end
-                if self.Name == "" then
-
-                end
-                task.spawn(function()
-                    Save()
-                end)
             end
         end
 
@@ -625,7 +641,8 @@ function LoadScript(isPremium)
 
     CreateToggle("Main", "Auto Start", "AutoStart", function()
         while task.wait() do
-            if player.PlayerGui.GameSelection.GameSelectionFrame.Visible or player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
+            if player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+                player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
                 local args = {
                     [1] = _G.Settings.SelectedMap,
                     [2] = tonumber(_G.Settings.SelectedLevel),
