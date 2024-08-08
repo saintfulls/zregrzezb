@@ -697,6 +697,10 @@ function LoadScript(isPremium)
         Macros[_G.Settings.SelectedMacro] = {}
     end)
 
+    CreateButton("Macro", "Clear Macro", function ()
+        writefile(macroFolder .. "/" .. _G.Settings.SelectedMacro .. ".json", HttpService:JSONEncode({}))
+    end)
+
     CreateButton("Macro", "Delete Macro", function()
         delfile(macroFolder .. "/" .. _G.Settings.SelectedMacro .. ".json")
         MacroDropdown:UpdateOptions(refreshMacrosList())
@@ -715,6 +719,20 @@ function LoadScript(isPremium)
             MacroPlayback()
         end
     end)
+
+    while true do
+        if _G.Settings.MacroRecording then
+            if _G.Settings.MacroPlaying then
+                PlayMacro:Set(false)
+            end
+        elseif _G.Settings.MacroPlaying then
+            if _G.Settings.MacroRecording then
+                RecordMacro:Set(false)
+            end
+        end
+        wait()
+    end
+    
     -- [[// Misc Tab \\]] --
 
     CreateSection("Misc", "Main")
