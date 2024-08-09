@@ -423,16 +423,16 @@ function LoadScript(isPremium)
 
     local function StartMacroTimer()
 
-        if player.PlayerGui.GameSelection.GameSelectionFrame ~= nil or
+        if player.PlayerGui.GameSelection.GameSelectionFrame ~= nil and
             player.PlayerGui.GameSelection.EndlessGameSelection ~= nil then
             return
         end
         repeat
             task.wait()
-        until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+        until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible and
             not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
 
-        if not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
+        if not player.PlayerGui.GameSelection.GameSelectionFrame.Visible and
             not player.PlayerGui.GameSelection.EndlessGameSelection.Visible then
             startTime = os.time()
             startTimeOffset = os.time()
@@ -487,9 +487,7 @@ function LoadScript(isPremium)
                 -- if action happened before wave started, can execute all at once.
             until timeElapsed() >= time or time < 0
 
-            if not JSON.macro_playback then
-                return
-            end
+            
 
             local action = v[4]
             local parameters = remote_arguments
@@ -534,6 +532,8 @@ function LoadScript(isPremium)
         end
     end
 
+    task.spawn(StartMacroTimer)
+
     local game_metatable = getrawmetatable(game)
     local namecall_original = game_metatable.__namecall
 
@@ -551,19 +551,16 @@ function LoadScript(isPremium)
                 repeat
                     task.wait()
                 until player.Money ~= nil
-                repeat
-                    task.wait()
-                until not player.PlayerGui.GameSelection.GameSelectionFrame.Visible or
-                    not player.PlayerGui.GameSelection.EndlessGameSelection.Visible
+               
                 local money = nil
 
                 money = GetMoney()
-                if self.Name ~= "StopSetting" then
+                if self.Name ~= "StopSetting" or self.Name ~= "Vote" then
                     if self.Name == "Sell" then
                         table.insert(Macros[_G.Settings.SelectedMacro], {
                             [1] = timeElapsed(),
                             [2] = {
-                                [1] = Args[1]
+                                [1] = script
 
                             },
                             [3] = money,
@@ -590,15 +587,17 @@ function LoadScript(isPremium)
                                 [2] = tostring(Args[2])
 
                             },
-                            [3] = money
+                            [3] = money,
+                            [4] = self.Name
                         })
+                        
                     end
                     if self.Name == "Upgrade" then
 
                         table.insert(Macros[_G.Settings.SelectedMacro], {
                             [1] = timeElapsed(),
                             [2] = {
-                                [1] = tostring(Args[1])
+                                [1] = Args[1]:GetFullName()
 
                             },
                             [3] = money,
@@ -616,7 +615,6 @@ function LoadScript(isPremium)
         return namecall_original(self, ...)
     end)
 
-    task.spawn(StartMacroTimer)
 
     local Maps = {"1", "2", "3"}
 
