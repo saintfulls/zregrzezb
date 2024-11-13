@@ -360,7 +360,7 @@ end)
 
 repeat
     task.wait()
-until #player.ProfileLoaded.Value == 0
+until player.ProfileLoaded.Value == 0
 
 if not workspace.Lobby then
     if JSON.auto_join_game then
