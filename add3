@@ -345,7 +345,7 @@ game_metatable.__namecall = newcclosure(function(self, ...)
 end)
 
 
-if not workspace.Lobby then
+if not game.Workspace:FindFirstChild("Lobby") then
     if JSON.auto_join_game then
         task.spawn(JoinGame)
     end
